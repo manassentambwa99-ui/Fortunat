@@ -1,0 +1,106 @@
+/* =========================================================
+   AgriFortunat — ajouts pour les pages séparées et les cours
+   (mêmes variables, mêmes polices que style.css)
+   ========================================================= */
+
+.page-pad{padding-top:86px}
+.page-end{padding-bottom:clamp(3.4rem,6vw,5.6rem)}
+
+/* ---------- lien de cours dans le registre ---------- */
+.course-col{display:flex;flex-direction:column;gap:1.35rem;align-items:flex-start}
+.course-col ul{width:100%}
+
+/* ---------- accueil : parcours ---------- */
+.hub{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--ink);border-left:1px solid var(--rule)}
+.hub-card{display:flex;flex-direction:column;padding:2rem 1.8rem;border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);background:var(--paper-2);transition:background .4s var(--ease)}
+.hub-card:hover{background:#fff}
+.hub-card .hn{font-family:'Fraunces',serif;font-weight:900;font-size:2.6rem;line-height:.9;color:var(--rule);letter-spacing:-.04em;transition:color .4s var(--ease)}
+.hub-card:hover .hn{color:var(--clay)}
+.hub-card h3{font-family:'Fraunces',serif;font-size:1.45rem;font-weight:700;line-height:1.15;margin:1rem 0 .55rem;letter-spacing:-.015em}
+.hub-card p{font-size:.93rem;color:var(--muted);margin-bottom:1.1rem}
+.hub-card ul{list-style:none;display:flex;flex-direction:column;margin-bottom:1.4rem}
+.hub-card li a{display:flex;justify-content:space-between;gap:1rem;padding:.55rem 0;border-bottom:1px solid var(--rule);font-size:.9rem;font-weight:600;transition:color .3s,padding .3s var(--ease)}
+.hub-card li a span{color:var(--muted);font-weight:500;font-size:.8rem}
+.hub-card li a:hover{color:var(--clay);padding-left:.4rem}
+.hub-go{margin-top:auto;display:flex;justify-content:space-between;align-items:center;gap:1rem;border-top:1px dashed var(--rule);padding-top:.85rem;font-size:.74rem;letter-spacing:.17em;text-transform:uppercase;font-weight:700;color:var(--clay)}
+.hub-go:hover{color:var(--ink)}
+.hub-gap{height:clamp(3.2rem,6vw,5.4rem)}
+
+/* ---------- bandeau « étape suivante » ---------- */
+.next-step{background:var(--ink);color:var(--paper)}
+.next-step .wrap{display:flex;justify-content:space-between;align-items:center;gap:1.5rem;flex-wrap:wrap;padding-top:2.8rem;padding-bottom:2.8rem}
+.next-step .eyebrow{color:var(--clay-soft)}
+.next-step .eyebrow::before{background:var(--clay-soft)}
+.next-step h3{font-family:'Fraunces',serif;font-size:clamp(1.45rem,2.7vw,2.1rem);font-weight:700;line-height:1.1;letter-spacing:-.02em;margin-top:.7rem;max-width:26ch}
+
+/* ---------- pages de cours ---------- */
+.course{display:grid;grid-template-columns:250px minmax(0,1fr);gap:clamp(1.6rem,4vw,3.6rem);align-items:start;padding-bottom:clamp(3rem,6vw,5rem)}
+.toc{position:sticky;top:112px;border-top:1px solid var(--ink)}
+.toc-title{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:var(--clay);padding:.9rem 0 .5rem}
+.toc a{display:grid;grid-template-columns:34px minmax(0,1fr);gap:.5rem;padding:.8rem 0;border-bottom:1px solid var(--rule);font-size:.88rem;font-weight:600;line-height:1.35;color:var(--muted);transition:color .3s var(--ease)}
+.toc a b{font-family:'Fraunces',serif;color:var(--rule);transition:color .3s var(--ease)}
+.toc a:hover,.toc a.on{color:var(--ink)}
+.toc a.on b,.toc a:hover b{color:var(--clay)}
+
+.lesson{padding:2.1rem 0 2.3rem;border-bottom:1px solid var(--rule)}
+.lesson:first-child{border-top:1px solid var(--ink);padding-top:1.7rem}
+.lesson-head{display:flex;align-items:baseline;gap:1.2rem;margin-bottom:1.1rem}
+.lesson-n{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(2.1rem,4vw,3.15rem);line-height:.8;color:var(--clay);letter-spacing:-.04em}
+.lesson h3{font-family:'Fraunces',serif;font-weight:700;font-size:clamp(1.3rem,2.3vw,1.8rem);line-height:1.16;letter-spacing:-.015em}
+.lesson h4{font-family:'Fraunces',serif;font-size:1.08rem;font-weight:700;margin:1.5rem 0 .5rem}
+.lesson p{color:var(--muted);max-width:68ch;margin-bottom:.9rem}
+.lesson ul{list-style:none;display:flex;flex-direction:column;gap:.7rem;margin:.6rem 0 1rem;max-width:70ch}
+.lesson li{position:relative;padding-left:1.55rem;font-size:.97rem;color:var(--muted)}
+.lesson li::before{content:"";position:absolute;left:0;top:.72em;width:9px;height:1px;background:var(--clay)}
+.lesson li b{color:var(--ink);font-weight:600}
+
+.tbl-wrap{overflow-x:auto;margin:1.1rem 0 1.2rem;border:1px solid var(--rule);background:var(--paper-2);-webkit-overflow-scrolling:touch}
+.tbl{width:100%;border-collapse:collapse;font-size:.9rem;min-width:520px}
+.tbl th{text-align:left;background:var(--ink);color:var(--paper);padding:.72rem .95rem;font-size:.68rem;letter-spacing:.17em;text-transform:uppercase;font-weight:700}
+.tbl td{padding:.78rem .95rem;border-top:1px solid var(--rule);color:var(--muted);vertical-align:top}
+.tbl td:first-child{color:var(--ink);font-weight:600}
+.tbl-note{font-size:.8rem;color:var(--muted);margin:-.5rem 0 1rem}
+
+.callout{border-left:3px solid var(--clay);background:var(--paper-2);padding:1.1rem 1.3rem;margin:1.4rem 0 .4rem;font-size:.95rem;color:var(--muted);max-width:70ch}
+.callout b{display:block;font-family:'Fraunces',serif;font-size:1.06rem;color:var(--ink);margin-bottom:.3rem}
+
+.todo{border:1px solid var(--ink);background:var(--paper-2);margin-top:2.4rem}
+.todo-head{background:var(--ink);color:var(--paper);padding:1.05rem 1.4rem;font-family:'Fraunces',serif;font-weight:700;font-size:1.15rem}
+.todo ul{list-style:none;padding:.3rem 1.4rem .9rem}
+.todo label{display:flex;gap:.85rem;padding:.8rem 0;border-bottom:1px solid var(--rule);cursor:pointer;font-size:.95rem}
+.todo li:last-child label{border-bottom:none}
+.todo input{accent-color:var(--clay);width:18px;height:18px;margin-top:.2rem;flex:none}
+.todo input:checked + span{text-decoration:line-through;opacity:.55}
+
+.quiz{margin-top:2.4rem;border:1px solid var(--rule);background:#fff}
+.quiz-head{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;padding:1.05rem 1.4rem;border-bottom:1px solid var(--rule)}
+.quiz-head h3{font-family:'Fraunces',serif;font-size:1.2rem;font-weight:700}
+.quiz-score{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:var(--muted)}
+.quiz-score b{color:var(--clay)}
+.q{padding:1.3rem 1.4rem;border-bottom:1px solid var(--rule)}
+.q:last-of-type{border-bottom:none}
+.q .qt{font-family:'Fraunces',serif;font-weight:700;font-size:1.08rem;line-height:1.28;margin-bottom:.85rem}
+.opt-btn{display:block;width:100%;text-align:left;background:transparent;border:1px solid var(--rule);padding:.78rem 1rem;margin-bottom:.5rem;cursor:pointer;font-size:.93rem;transition:border-color .3s var(--ease),background .3s var(--ease)}
+.opt-btn:hover{border-color:var(--clay)}
+.opt-btn.good{border-color:var(--sap);background:rgba(47,107,63,.1)}
+.opt-btn.bad{border-color:#B3402A;background:rgba(179,64,42,.08)}
+.q .why{display:none;font-size:.9rem;color:var(--muted);margin-top:.7rem;padding-left:.9rem;border-left:2px solid var(--clay)}
+.q.done .why{display:block}
+.q.done .opt-btn{pointer-events:none}
+.quiz-result{display:none;padding:1.1rem 1.4rem;background:var(--paper-2);border-top:1px solid var(--rule);font-size:.95rem}
+.quiz-result.show{display:block}
+.quiz-result b{font-family:'Fraunces',serif;font-size:1.1rem}
+
+.course-nav{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-top:2.4rem}
+
+/* ---------- responsive ---------- */
+@media (max-width:1024px){
+  .course{grid-template-columns:minmax(0,1fr)}
+  .toc{position:static}
+  .hub{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:760px){
+  .page-pad{padding-top:74px}
+  .lesson-head{gap:.85rem}
+  .next-step .wrap{padding-top:2.2rem;padding-bottom:2.2rem}
+}
