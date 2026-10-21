@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagnostic IA par photo — AgriFortunat</title>
+<meta name="description" content="Photographiez votre plante : l'assistant identifie l'espèce, estime le stade et recommande engrais et arrosage.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400;1,9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/extra.css">
+</head>
+<body data-page="diagnostic">
+
+<nav class="rail" aria-label="Sommaire">  
+  <div class="rail-mark" id="railMark"></div>  
+  <a class="rail-item" href="academie.html" data-rail="academie"><span class="rn">01</span><span class="rl">Académie</span></a>  
+  <a class="rail-item" href="croissance.html" data-rail="croissance"><span class="rn">02</span><span class="rl">Croissance</span></a>  
+  <a class="rail-item" href="diagnostic.html" data-rail="diagnostic"><span class="rn">03</span><span class="rl">Diagnostic</span></a>  
+  <a class="rail-item" href="index.html#chef" data-rail="chef"><span class="rn">04</span><span class="rl">Le Chef</span></a>  
+  <a class="rail-item" href="#contact" data-rail="contact"><span class="rn">05</span><span class="rl">Contact</span></a>  
+</nav>
+
+<header id="header">  
+  <div class="nav">  
+    <a href="index.html" class="logo" aria-label="AgriFortunat, accueil">  
+      <svg class="seed" viewBox="0 0 32 32" fill="none" aria-hidden="true">  
+        <path d="M16 29V13" stroke="#14301F" stroke-width="2.1" stroke-linecap="round"/>  
+        <path d="M16 17C16 11 11.2 6.6 4.6 6.2 4.2 13 8.8 17.6 16 17Z" fill="#2F6B3F"/>  
+        <path d="M16 13.4C16 8.2 20.2 4.3 26.2 4 26.6 9.9 22.4 13.9 16 13.4Z" fill="#C2622D"/>  
+      </svg>  
+      Agri<em>Fortunat</em>  
+    </a>  
+    <ul class="nav-links">  
+      <li><a href="academie.html">Académie</a></li>  
+      <li><a href="croissance.html">Ce qu'il faut pour grandir</a></li>  
+      <li><a href="diagnostic.html">Diagnostic IA</a></li>  
+      <li><a href="index.html#chef">Le mot du Chef</a></li>  
+    </ul>  
+    <a href="diagnostic.html" class="btn btn-solid">Scanner une plante  
+      <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>  
+    </a>  
+    <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false"><span></span><span></span><span></span></button>  
+  </div>  
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html">Accueil</a>  
+    <a href="academie.html">Académie des débutants</a>  
+    <a href="croissance.html">Ce qu'il faut pour grandir</a>  
+    <a href="diagnostic.html">Diagnostic IA</a>  
+    <a href="index.html#chef">Le mot du Chef</a>  
+    <a href="#contact">Contact</a>  
+  </div>  
+</header>
+
+<main>
+<section id="diagnostic" class="page-pad">  
+    <div class="wrap">  
+      <div class="sec-head">  
+        <div>  
+          <span class="num-tag reveal">03 — Assistant phytosanitaire</span>  
+          <h2 class="display reveal">Photographiez.<br>L'IA lit la plante.</h2>  
+        </div>  
+        <p class="lead reveal">Prenez une photo de votre plante ou de votre sol : l'assistant identifie l'espèce, estime le stade, repère les symptômes et prescrit l'engrais et l'arrosage adaptés — en français, en quelques secondes.</p>  
+      </div>  <div class="diag">  
+    <div>  
+      <div class="drop" id="drop" tabindex="0" role="button" aria-label="Importer une photo de plante">  
+        <svg class="cam" viewBox="0 0 48 48" fill="none" aria-hidden="true">  
+          <path d="M4 15h9l3.4-5h15.2L35 15h9v25H4V15Z" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>  
+          <circle cx="24" cy="27" r="8.2" stroke="currentColor" stroke-width="2.2"/>  
+          <path d="M24 21.4c2.6 1.6 3.2 4 2 6.6" stroke="#C2622D" stroke-width="2.2" stroke-linecap="round"/>  
+        </svg>  
+        <h3>Importer une photo</h3>  
+        <p>Glissez-déposez une image ici, ou cliquez pour parcourir vos fichiers.<br>JPG, PNG ou HEIC — 10 Mo maximum.</p>  
+        <span class="btn btn-clay">Sélectionner l'image</span>  
+        <input type="file" id="plantFile" accept="image/*" style="display:none">  
+      </div>  
+
+      <div class="preview" id="preview">  
+        <img id="previewImg" alt="Aperçu de la photo sélectionnée">  
+        <div class="tag" id="previewTag">Aperçu — prêt pour analyse</div>  
+      </div>  
+
+      <div class="log" id="log">  
+        <div style="animation-delay:.05s">En attente d'une image…</div>  
+      </div>  
+    </div>  
+
+    <div class="report">  
+      <div class="report-head">  
+        <h3><span class="pulse"></span> Rapport d'analyse IA</h3>  
+        <div class="rid num" id="reportId">Réf. AF-2026-0000</div>  
+      </div>  
+      <div class="report-body">  
+        <div class="rline"><span class="k">Espèce détectée</span><span class="v" id="resEspece">En attente de photo…</span></div>  
+        <div class="rline"><span class="k">Âge / stade</span><span class="v" id="resAge">—</span></div>  
+        <div class="rline"><span class="k">Engrais recommandé</span><span class="v" id="resEngrais">—</span></div>  
+        <div class="rline"><span class="k">Arrosage</span><span class="v" id="resArrosage">—</span></div>  
+        <div class="rline" style="border-bottom:none"><span class="k">Exposition</span><span class="v" id="resExposition">—</span></div>  
+
+        <div class="ring-wrap">  
+          <div class="ring">  
+            <svg width="118" height="118" viewBox="0 0 118 118" aria-hidden="true">  
+              <circle cx="59" cy="59" r="50" fill="none" stroke="#D9CDB4" stroke-width="9"/>  
+              <circle id="ringArc" cx="59" cy="59" r="50" fill="none" stroke="#C2622D" stroke-width="9" stroke-linecap="round" stroke-dasharray="314" stroke-dashoffset="314" style="transition:stroke-dashoffset .9s cubic-bezier(.16,1,.3,1)"/>  
+            </svg>  
+            <div class="rv num" id="ringVal">0%</div>  
+          </div>  
+          <div class="ring-cap">  
+            <div class="k">Progression vers la maturité</div>  
+            <h4 id="ringTitle">Aucune analyse effectuée</h4>  
+            <p id="ringDesc">Chargez une photo pour obtenir une estimation du stade phénologique et un calendrier de récolte personnalisé.</p>  
+          </div>  
+        </div>  
+
+        <div class="care">  
+          <div><div class="k">Prochain arrosage</div><div class="v num" id="careEau">—</div></div>  
+          <div><div class="k">Prochain apport</div><div class="v num" id="careEngrais">—</div></div>  
+          <div><div class="k">Récolte estimée</div><div class="v num" id="careRecolte">—</div></div>  
+        </div>  
+
+        <div class="report-actions">  
+          <button class="btn btn-ghost" id="btnRescan">Analyser une autre photo</button>  
+          <span class="mini">Modèle vision Groq</span>  
+          <span class="mini">Réponses en français</span>  
+        </div>  
+      </div>  
+    </div>  
+  </div>  
+</div>
+
+  </section>
+<div class="next-step">
+  <div class="wrap">
+    <div><span class="eyebrow">Pour aller plus loin</span><h3>Comprendre le diagnostic, c'est savoir lire son sol et son eau.</h3></div>
+    <a href="academie.html" class="btn btn-line">Retour à l'Académie</a>
+  </div>
+</div>
+</main>
+
+<footer id="contact">  
+    <div class="wrap">  
+      <div class="foot-grid">  
+        <div class="foot-brand">  
+          <a href="index.html" class="logo">  
+            <svg class="seed" viewBox="0 0 32 32" fill="none" aria-hidden="true">  
+              <path d="M16 29V13" stroke="#14301F" stroke-width="2.1" stroke-linecap="round"/>  
+              <path d="M16 17C16 11 11.2 6.6 4.6 6.2 4.2 13 8.8 17.6 16 17Z" fill="#2F6B3F"/>  
+              <path d="M16 13.4C16 8.2 20.2 4.3 26.2 4 26.6 9.9 22.4 13.9 16 13.4Z" fill="#C2622D"/>  
+            </svg>  
+            Agri<em>Fortunat</em>  
+          </a>  
+          <p>Académie agricole, conseil de culture et assistant phytosanitaire intelligent. Pour celles et ceux qui veulent comprendre la terre avant de la travailler.</p>  
+        </div>  
+        <div class="foot">  
+          <h5>Formation</h5>  
+          <ul>  
+            <li><a href="cours-sol.html">Analyse du sol</a></li>  
+            <li><a href="cours-semis.html">Calendrier des semis</a></li>  
+            <li><a href="cours-entretien.html">Entretien &amp; engrais</a></li>  
+            <li><a href="cours-moisson.html">Moisson &amp; maturité</a></li>  
+          </ul>  
+        </div>  
+        <div class="foot">  
+          <h5>Outils</h5>  
+          <ul>  
+            <li><a href="croissance.html">Simulateur de croissance</a></li>  
+            <li><a href="diagnostic.html">Diagnostic par photo</a></li>  
+            <li><a href="croissance.html">Zones optimales</a></li>  
+            <li><a href="diagnostic.html">Suivi de parcelle</a></li>  
+          </ul>  
+        </div>  
+        <div class="foot">  
+          <h5>Contact</h5>  
+          <ul>  
+            <li><a href="mailto:contact@agrifortuna.com">contact@agrifortuna.com</a></li>  
+            <li><a href="tel:+22900000000">+229 00 00 00 00</a></li>  
+            <li><a href="index.html#chef">Le mot du Chef</a></li>  
+            <li><a href="diagnostic.html">Devenir partenaire</a></li>  
+          </ul>  
+        </div>  
+      </div>  
+      <div class="foot-note">  
+        <div class="warn">Les analyses par photo sont des estimations indicatives : confirmez sur le terrain avant tout traitement.</div>  
+        <div>© 2026 AgriFortunat — Tous droits réservés.</div>  
+      </div>  
+    </div>  
+  </footer>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="js/common.js"></script>
+<script src="js/diagnostic.js"></script>
+</body>
+</html>
