@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ce qu'il faut pour grandir — AgriFortunat</title>
+<meta name="description" content="Les six facteurs de croissance d'une plante et un simulateur pour tester lumière, eau, température et azote.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400;1,9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/extra.css">
+</head>
+<body data-page="croissance">
+
+<nav class="rail" aria-label="Sommaire">  
+  <div class="rail-mark" id="railMark"></div>  
+  <a class="rail-item" href="academie.html" data-rail="academie"><span class="rn">01</span><span class="rl">Académie</span></a>  
+  <a class="rail-item" href="croissance.html" data-rail="croissance"><span class="rn">02</span><span class="rl">Croissance</span></a>  
+  <a class="rail-item" href="diagnostic.html" data-rail="diagnostic"><span class="rn">03</span><span class="rl">Diagnostic</span></a>  
+  <a class="rail-item" href="index.html#chef" data-rail="chef"><span class="rn">04</span><span class="rl">Le Chef</span></a>  
+  <a class="rail-item" href="#contact" data-rail="contact"><span class="rn">05</span><span class="rl">Contact</span></a>  
+</nav>
+
+<header id="header">  
+  <div class="nav">  
+    <a href="index.html" class="logo" aria-label="AgriFortunat, accueil">  
+      <svg class="seed" viewBox="0 0 32 32" fill="none" aria-hidden="true">  
+        <path d="M16 29V13" stroke="#14301F" stroke-width="2.1" stroke-linecap="round"/>  
+        <path d="M16 17C16 11 11.2 6.6 4.6 6.2 4.2 13 8.8 17.6 16 17Z" fill="#2F6B3F"/>  
+        <path d="M16 13.4C16 8.2 20.2 4.3 26.2 4 26.6 9.9 22.4 13.9 16 13.4Z" fill="#C2622D"/>  
+      </svg>  
+      Agri<em>Fortunat</em>  
+    </a>  
+    <ul class="nav-links">  
+      <li><a href="academie.html">Académie</a></li>  
+      <li><a href="croissance.html">Ce qu'il faut pour grandir</a></li>  
+      <li><a href="diagnostic.html">Diagnostic IA</a></li>  
+      <li><a href="index.html#chef">Le mot du Chef</a></li>  
+    </ul>  
+    <a href="diagnostic.html" class="btn btn-solid">Scanner une plante  
+      <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>  
+    </a>  
+    <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false"><span></span><span></span><span></span></button>  
+  </div>  
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html">Accueil</a>  
+    <a href="academie.html">Académie des débutants</a>  
+    <a href="croissance.html">Ce qu'il faut pour grandir</a>  
+    <a href="diagnostic.html">Diagnostic IA</a>  
+    <a href="index.html#chef">Le mot du Chef</a>  
+    <a href="#contact">Contact</a>  
+  </div>  
+</header>
+
+<main>
+<section id="croissance" class="page-pad">  
+    <div class="wrap">  
+      <div class="sec-head">  
+        <div>  
+          <span class="num-tag reveal">02 — Fiche de culture</span>  
+          <h2 class="display reveal">Qu'est-ce qu'il faut<br>pour qu'elle <span class="ital" style="color:var(--clay)">grandisse</span> ?</h2>  
+        </div>  
+        <p class="lead reveal">Une plante ne « pousse » pas toute seule : elle répond à six facteurs, dont quatre se pilotent au quotidien. Voici leurs zones optimales — puis testez-les vous-même sur la plante ci-dessous.</p>  
+      </div>  <div class="factors">  
+    <div class="factor reveal">  
+      <svg class="fi" viewBox="0 0 40 40" fill="none" aria-hidden="true"><circle cx="20" cy="20" r="8" stroke="currentColor" stroke-width="2"/><path d="M20 3v6M20 31v6M3 20h6M31 20h6M8 8l4 4M28 28l4 4M32 8l-4 4M12 28l-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>  
+      <h4>Lumière</h4>  
+      <p>La photosynthèse demande un minimum d'énergie : sans elle, la plante s'étiole et monte en fleur trop tôt.</p>  
+      <div class="opt"><span>Optimum</span><span class="num">8 – 12 h / jour</span></div>  
+    </div>  
+    <div class="factor reveal">  
+      <svg class="fi" viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M20 4c7 9 11 13.6 11 19a11 11 0 1 1-22 0c0-5.4 4-10 11-19Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M15 25a5.5 5.5 0 0 0 5 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>  
+      <h4>Eau</h4>  
+      <p>Elle transporte les minéraux jusqu'aux feuilles. Excès : asphyxie racinaire. Manque : flétrissement et carence.</p>  
+      <div class="opt"><span>Optimum</span><span class="num">25 – 45 mm / sem.</span></div>  
+    </div>  
+    <div class="factor reveal">  
+      <svg class="fi" viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M6 34h28" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M20 34V14M20 20c0-6-4.6-10-11-10 0 6.4 4.6 10 11 10ZM20 16c0-5 3.8-8.4 9-8.4 0 5.2-3.8 8.4-9 8.4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>  
+      <h4>Azote &amp; minéraux</h4>  
+      <p>L'azote construit le feuille, le phosphore enracine, le potassium charge les fruits. Le déséquilibre se voit en 5 jours.</p>  
+      <div class="opt"><span>Optimum</span><span class="num">60 – 120 kg / ha</span></div>  
+    </div>  
+    <div class="factor reveal">  
+      <svg class="fi" viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M17 24V9a3 3 0 0 1 6 0v15a6.5 6.5 0 1 1-6 0Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M20 17v9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>  
+      <h4>Température</h4>  
+      <p>Chaque stade a sa plage : la germination, la floraison puis le grossissement des fruits n'ont pas les mêmes besoins.</p>  
+      <div class="opt"><span>Optimum</span><span class="num">18 – 28 °C</span></div>  
+    </div>  
+    <div class="factor reveal">  
+      <svg class="fi" viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M4 26h32M4 32h32" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M10 20c2-5 6-8 10-8s8 3 10 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="2.4" stroke="currentColor" stroke-width="2"/><circle cx="28" cy="10" r="2.4" stroke="currentColor" stroke-width="2"/></svg>  
+      <h4>Structure du sol</h4>  
+      <p>Un sol labouré trop fin s'érode et se tasse. Il faut de l'air pour les racines et de la matière organique pour la vie microbienne.</p>  
+      <div class="opt"><span>Optimum</span><span class="num">2 – 4 % matière org.</span></div>  
+    </div>  
+    <div class="factor reveal">  
+      <svg class="fi" viewBox="0 0 40 40" fill="none" aria-hidden="true"><rect x="5" y="5" width="30" height="30" stroke="currentColor" stroke-width="2"/><path d="M15 5v30M25 5v30M5 15h30M5 25h30" stroke="currentColor" stroke-width="1.4" opacity=".55"/></svg>  
+      <h4>Espace &amp; air</h4>  
+      <p>L'espacement décide de la circulation de l'air : trop serré, l'oïdium et la botrytis s'installent en une nuit humide.</p>  
+      <div class="opt"><span>Optimum</span><span class="num">45 – 60 cm / plant</span></div>  
+    </div>  
+  </div>  
+</div>  
+
+<!-- SIMULATEUR -->  
+<div class="sim">  
+  <div class="sim-grid">  
+    <div>  
+      <div class="plant-stage">  
+        <svg class="plant" id="plantSvg" viewBox="0 0 320 420" role="img" aria-label="Représentation dessinée d'une plante dont la croissance dépend des curseurs">  
+          <!-- soleil -->  
+          <circle cx="58" cy="58" r="21" fill="#C2622D" opacity=".55" id="sun"/>  
+          <g stroke="#C2622D" stroke-width="2.2" stroke-linecap="round" opacity=".42" id="sunRays">  
+            <path d="M58 22v-11M58 105v11M22 58H11M94 58h11M32 32l-8-8M84 84l8 8M84 32l8-8M32 84l-8 8"/>  
+          </g>  
+          <!-- gouttes -->  
+          <g class="drop"><rect x="236" y="70" width="7" height="13" rx="3.5"/></g>  
+          <g class="drop"><rect x="264" y="62" width="7" height="13" rx="3.5"/></g>  
+          <g class="drop"><rect x="250" y="86" width="7" height="13" rx="3.5"/></g>  
+          <!-- sol -->  
+          <rect x="20" y="300" width="280" height="100" fill="#22422C"/>  
+          <path d="M20 300h280" stroke="#7FBF7A" stroke-width="2.4"/>  
+          <!-- racines -->  
+          <g class="root" stroke-width="3.2" stroke-linecap="round" fill="none">  
+            <path d="M160 302c-4 18-16 26-26 34"/>  
+            <path d="M160 302c2 20 12 30 22 40"/>  
+            <path d="M160 302c-1 26 1 40 2 56"/>  
+            <path d="M160 316c-10 8-18 12-28 14"/>  
+          </g>  
+          <!-- tige -->  
+          <path class="stem" d="M160 302c-5-52-2-96 1-140" stroke="var(--stem)" stroke-width="9" stroke-linecap="round" fill="none"/>  
+          <!-- feuilles -->  
+          <g transform="translate(158,252) rotate(-22)"><g class="leafwrap">  
+            <path class="leaf" d="M0 0C22-26 60-30 82-6 60 18 22 20 0 0Z"/>  
+            <path d="M2 0h72" stroke="#22422C" stroke-width="1.6" opacity=".38"/>  
+          </g></g>  
+          <g transform="translate(162,232) rotate(22)"><g class="leafwrap mirror">  
+            <path class="leaf" d="M0 0C22-26 60-30 82-6 60 18 22 20 0 0Z"/>  
+            <path d="M2 0h72" stroke="#22422C" stroke-width="1.6" opacity=".38"/>  
+          </g></g>  
+          <g transform="translate(158,204) rotate(-30)"><g class="leafwrap">  
+            <path class="leaf" d="M0 0C18-22 50-25 68-5 50 15 18 17 0 0Z"/>  
+            <path d="M2 0h60" stroke="#22422C" stroke-width="1.6" opacity=".38"/>  
+          </g></g>  
+          <g transform="translate(161,182) rotate(30)"><g class="leafwrap mirror">  
+            <path class="leaf" d="M0 0C18-22 50-25 68-5 50 15 18 17 0 0Z"/>  
+            <path d="M2 0h60" stroke="#22422C" stroke-width="1.6" opacity=".38"/>  
+          </g></g>  
+          <g transform="translate(159,156) rotate(-42)"><g class="leafwrap">  
+            <path class="leaf" d="M0 0C14-17 38-20 52-4 38 12 14 13 0 0Z"/>  
+          </g></g>  
+          <!-- apex -->  
+          <path class="stem" d="M161 162c-1-10 1-18 3-24" stroke="var(--stem)" stroke-width="6" stroke-linecap="round" fill="none" style="transform-box:view-box;transform-origin:161px 162px;transform:scaleY(var(--grow))"/>  
+        </svg>  
+
+        <div class="sim-readouts">  
+          <div class="readout">  
+            <div class="k">Indice de vigueur</div>  
+            <div class="v"><span class="num" id="idxVigueur">62</span><small> / 100</small></div>  
+            <div class="gauge"><i id="gVigueur" style="width:62%"></i></div>  
+          </div>  
+          <div class="readout">  
+            <div class="k">Croissance estimée</div>  
+            <div class="v"><span class="num" id="idxCroissance">+2,4</span> <small>cm / semaine</small></div>  
+          </div>  
+          <div class="readout">  
+            <div class="k">Rendement projeté</div>  
+            <div class="v"><span class="num" id="idxRendement">5,1</span> <small>kg / plant</small></div>  
+          </div>  
+          <div class="readout" style="border-bottom:none">  
+            <div class="k">Récolte dans</div>  
+            <div class="v"><span class="num" id="idxRecolte">78</span> <small>jours</small></div>  
+          </div>  
+        </div>  
+      </div>  
+    </div>  
+
+    <div>  
+      <span class="eyebrow">Simulateur de croissance</span>  
+      <h3>Réglez les conditions,<br>regardez-la grandir.</h3>  
+      <p class="lead">Chaque curseur agit directement sur la plante dessinée. L'indice de vigueur combine les quatre facteurs et vous indique le geste à corriger en priorité.</p>  
+
+      <div class="sliders">  
+        <div class="slider-row">  
+          <div class="top"><label class="lbl" for="sLum">Lumière — exposition</label><span class="val num" id="vLum">10 h / jour</span></div>  
+          <input type="range" id="sLum" min="0" max="16" step="1" value="10" aria-describedby="vLum">  
+        </div>  
+        <div class="slider-row">  
+          <div class="top"><label class="lbl" for="sEau">Eau — irrigation</label><span class="val num" id="vEau">35 mm / sem.</span></div>  
+          <input type="range" id="sEau" min="0" max="80" step="1" value="35" aria-describedby="vEau">  
+        </div>  
+        <div class="slider-row">  
+          <div class="top"><label class="lbl" for="sTemp">Température — serre</label><span class="val num" id="vTemp">23 °C</span></div>  
+          <input type="range" id="sTemp" min="4" max="42" step="1" value="23" aria-describedby="vTemp">  
+        </div>  
+        <div class="slider-row">  
+          <div class="top"><label class="lbl" for="sAzote">Azote — fertilisation</label><span class="val num" id="vAzote">90 kg / ha</span></div>  
+          <input type="range" id="sAzote" min="0" max="220" step="5" value="90" aria-describedby="vAzote">  
+        </div>  
+      </div>  
+
+      <div class="presets" role="group" aria-label="Scénarios prédéfinis">  
+        <button class="preset on" data-preset="optimal">Conditions optimales</button>  
+        <button class="preset" data-preset="secheresse">Sécheresse</button>  
+        <button class="preset" data-preset="canicule">Canicule</button>  
+        <button class="preset" data-preset="carence">Carence en azote</button>  
+      </div>  
+
+      <div class="verdict" id="verdict" aria-live="polite">  
+        <b id="verdictTitle">Conditions équilibrées</b>  
+        <span id="verdictText">La plante dispose de tout ce qu'il lui faut : maintenez l'humidité régulière et surveillez la floraison.</span>  
+      </div>  
+    </div>  
+  </div>  
+</div>
+
+  </section>
+<div class="next-step">
+  <div class="wrap">
+    <div><span class="eyebrow">Étape suivante</span><h3>Passez de la théorie à votre propre culture.</h3></div>
+    <a href="diagnostic.html" class="btn btn-line">Lancer le diagnostic IA</a>
+  </div>
+</div>
+</main>
+
+<footer id="contact">  
+    <div class="wrap">  
+      <div class="foot-grid">  
+        <div class="foot-brand">  
+          <a href="index.html" class="logo">  
+            <svg class="seed" viewBox="0 0 32 32" fill="none" aria-hidden="true">  
+              <path d="M16 29V13" stroke="#14301F" stroke-width="2.1" stroke-linecap="round"/>  
+              <path d="M16 17C16 11 11.2 6.6 4.6 6.2 4.2 13 8.8 17.6 16 17Z" fill="#2F6B3F"/>  
+              <path d="M16 13.4C16 8.2 20.2 4.3 26.2 4 26.6 9.9 22.4 13.9 16 13.4Z" fill="#C2622D"/>  
+            </svg>  
+            Agri<em>Fortunat</em>  
+          </a>  
+          <p>Académie agricole, conseil de culture et assistant phytosanitaire intelligent. Pour celles et ceux qui veulent comprendre la terre avant de la travailler.</p>  
+        </div>  
+        <div class="foot">  
+          <h5>Formation</h5>  
+          <ul>  
+            <li><a href="cours-sol.html">Analyse du sol</a></li>  
+            <li><a href="cours-semis.html">Calendrier des semis</a></li>  
+            <li><a href="cours-entretien.html">Entretien &amp; engrais</a></li>  
+            <li><a href="cours-moisson.html">Moisson &amp; maturité</a></li>  
+          </ul>  
+        </div>  
+        <div class="foot">  
+          <h5>Outils</h5>  
+          <ul>  
+            <li><a href="croissance.html">Simulateur de croissance</a></li>  
+            <li><a href="diagnostic.html">Diagnostic par photo</a></li>  
+            <li><a href="croissance.html">Zones optimales</a></li>  
+            <li><a href="diagnostic.html">Suivi de parcelle</a></li>  
+          </ul>  
+        </div>  
+        <div class="foot">  
+          <h5>Contact</h5>  
+          <ul>  
+            <li><a href="mailto:contact@agrifortuna.com">contact@agrifortuna.com</a></li>  
+            <li><a href="tel:+22900000000">+229 00 00 00 00</a></li>  
+            <li><a href="index.html#chef">Le mot du Chef</a></li>  
+            <li><a href="diagnostic.html">Devenir partenaire</a></li>  
+          </ul>  
+        </div>  
+      </div>  
+      <div class="foot-note">  
+        <div class="warn">Les analyses par photo sont des estimations indicatives : confirmez sur le terrain avant tout traitement.</div>  
+        <div>© 2026 AgriFortunat — Tous droits réservés.</div>  
+      </div>  
+    </div>  
+  </footer>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="js/common.js"></script>
+<script src="js/simulator.js"></script>
+</body>
+</html>
