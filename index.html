@@ -1,224 +1,402 @@
-<!DOCTYPE html>
+here<!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AgriFortunat — Académie agricole &amp; diagnostic phyto intelligent</title>
-<meta name="description" content="AgriFortunat : apprenez les bases de l'agriculture, comprenez ce qu'il faut pour qu'une plante grandisse, et diagnostiquez vos cultures avec l'assistant phyto intelligent.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400;1,9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/extra.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MNLOS — Système Personnel Intelligent</title>
+    <style>
+        :root {
+            --bg-primary: #050B14;
+            --surface-translucent: rgba(10, 25, 47, 0.45);
+            --surface-card: rgba(15, 35, 70, 0.25);
+            --accent-cyan: #8CF5FF;
+            --accent-blue: #5E9DFF;
+            --accent-gold: #F0C875;
+            --text-main: #F1F7FF;
+            --text-secondary: #8FA9CC;
+            --border-glow: rgba(140, 245, 255, 0.2);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            background-image: 
+                radial-gradient(circle at 50% 10%, rgba(94, 157, 255, 0.08) 0%, transparent 60%),
+                radial-gradient(circle at 20% 90%, rgba(140, 245, 255, 0.05) 0%, transparent 50%);
+        }
+
+        /* Effet de grille spatiale subtile en arrière-plan */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: linear-gradient(rgba(140, 245, 255, 0.02) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(140, 245, 255, 0.02) 1px, transparent 1px);
+            background-size: 30px 30px;
+            z-index: -1;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid var(--border-glow);
+            backdrop-filter: blur(10px);
+            background: rgba(5, 11, 20, 0.6);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .system-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--accent-cyan);
+            text-shadow: 0 0 10px rgba(140, 245, 255, 0.4);
+        }
+
+        .system-status {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            background-color: var(--accent-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--accent-cyan);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.4; }
+            50% { opacity: 1; }
+            100% { opacity: 0.4; }
+        }
+
+        main {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            padding-bottom: 90px;
+        }
+
+        .glass-card {
+            background: var(--surface-card);
+            border: 1px solid var(--border-glow);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
+        }
+
+        .card-title {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .holo-value {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--text-main);
+            text-shadow: 0 0 15px rgba(241, 247, 255, 0.2);
+        }
+
+        .holo-subtext {
+            font-size: 0.85rem;
+            color: var(--accent-cyan);
+            margin-top: 5px;
+        }
+
+        /* Console / Assistant Section */
+        .assistant-box {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .assistant-log {
+            background: rgba(2, 6, 12, 0.6);
+            border: 1px solid rgba(94, 157, 255, 0.15);
+            border-radius: 10px;
+            padding: 12px;
+            height: 120px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .assistant-log p {
+            margin-bottom: 6px;
+        }
+
+        .assistant-log .ai-msg {
+            color: var(--accent-cyan);
+        }
+
+        .assistant-input-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            background: rgba(10, 25, 47, 0.8);
+            border: 1px solid var(--border-glow);
+            border-radius: 10px;
+            padding: 12px 15px;
+            color: var(--text-main);
+            font-size: 0.9rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 10px rgba(140, 245, 255, 0.2);
+        }
+
+        button {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+            border: none;
+            border-radius: 10px;
+            color: var(--bg-primary);
+            font-weight: 700;
+            padding: 0 20px;
+            cursor: pointer;
+            transition: transform 0.1s ease, box-shadow 0.3s ease;
+            box-shadow: 0 0 15px rgba(140, 245, 255, 0.3);
+        }
+
+        button:active {
+            transform: scale(0.96);
+        }
+
+        /* Dock de navigation bas */
+        nav.system-dock {
+            position: fixed;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 40px);
+            max-width: 450px;
+            background: rgba(5, 11, 20, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glow);
+            border-radius: 20px;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            z-index: 100;
+        }
+
+        .dock-item {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            box-shadow: none;
+            padding: 0;
+        }
+
+        .dock-item.active {
+            color: var(--accent-cyan);
+            text-shadow: 0 0 8px var(--accent-cyan);
+        }
+    </style>
 </head>
-<body data-page="accueil">
+<body>
 
-<nav class="rail" aria-label="Sommaire">  
-  <div class="rail-mark" id="railMark"></div>  
-  <a class="rail-item" href="academie.html" data-rail="academie"><span class="rn">01</span><span class="rl">Académie</span></a>  
-  <a class="rail-item" href="croissance.html" data-rail="croissance"><span class="rn">02</span><span class="rl">Croissance</span></a>  
-  <a class="rail-item" href="diagnostic.html" data-rail="diagnostic"><span class="rn">03</span><span class="rl">Diagnostic</span></a>  
-  <a class="rail-item" href="index.html#chef" data-rail="chef"><span class="rn">04</span><span class="rl">Le Chef</span></a>  
-  <a class="rail-item" href="#contact" data-rail="contact"><span class="rn">05</span><span class="rl">Contact</span></a>  
-</nav>
-
-<header id="header">  
-  <div class="nav">  
-    <a href="index.html" class="logo" aria-label="AgriFortunat, accueil">  
-      <svg class="seed" viewBox="0 0 32 32" fill="none" aria-hidden="true">  
-        <path d="M16 29V13" stroke="#14301F" stroke-width="2.1" stroke-linecap="round"/>  
-        <path d="M16 17C16 11 11.2 6.6 4.6 6.2 4.2 13 8.8 17.6 16 17Z" fill="#2F6B3F"/>  
-        <path d="M16 13.4C16 8.2 20.2 4.3 26.2 4 26.6 9.9 22.4 13.9 16 13.4Z" fill="#C2622D"/>  
-      </svg>  
-      Agri<em>Fortunat</em>  
-    </a>  
-    <ul class="nav-links">  
-      <li><a href="academie.html">Académie</a></li>  
-      <li><a href="croissance.html">Ce qu'il faut pour grandir</a></li>  
-      <li><a href="diagnostic.html">Diagnostic IA</a></li>  
-      <li><a href="index.html#chef">Le mot du Chef</a></li>  
-    </ul>  
-    <a href="diagnostic.html" class="btn btn-solid">Scanner une plante  
-      <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>  
-    </a>  
-    <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false"><span></span><span></span><span></span></button>  
-  </div>  
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="index.html">Accueil</a>  
-    <a href="academie.html">Académie des débutants</a>  
-    <a href="croissance.html">Ce qu'il faut pour grandir</a>  
-    <a href="diagnostic.html">Diagnostic IA</a>  
-    <a href="index.html#chef">Le mot du Chef</a>  
-    <a href="#contact">Contact</a>  
-  </div>  
-</header>
-
-<main>
-<section class="hero" id="top">  
-    <div class="wrap">  
-      <div class="hero-top">  
-        <h1 class="display hero-title">  
-          Cultivez<br>l'excellence,<br><span class="accent under">feuille<svg viewBox="0 0 300 14" preserveAspectRatio="none" aria-hidden="true"><path d="M2 9C60 3 118 12 176 6 224 1 262 8 298 4" stroke="#C2622D" stroke-width="4" fill="none" stroke-linecap="round"/></svg></span> après feuille.  
-        </h1>  
-        <div class="hero-note">  
-          <strong>AgriFortunat — depuis 2019</strong>  
-          De la mise en terre à la moisson : une méthode claire pour les nouveaux exploitants, un assistant qui lit vos plantes, et un suivi qui ne laisse rien au hasard.  
-        </div>  
-      </div>  
-    </div>  <div class="hero-band">  
-<div class="hero-media">  
-  <img src="https://images.pexels.com/photos/36917505/pexels-photo-36917505.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" alt="Rangées de plants de tomates dans une serre moderne">  
-  <div class="hero-badge">AgTech &amp; <b>Intelligence végétale</b></div>  
-</div>  
-  <div class="hero-plate">  
-    <p>Formez-vous aux bases de l'agriculture, suivez chaque étape de la croissance de vos plantes grâce à notre assistant intelligent, et propulsez vos rendements.</p>  
-    <div class="hero-actions">  
-      <a href="diagnostic.html" class="btn btn-clay">Lancer le diagnostic IA</a>  
-      <a href="croissance.html" class="btn btn-line">Simuler une croissance</a>  
-    </div>  
-  </div>  
-</div>  
-
-<div class="wrap">  
-  <div class="stats">  
-    <div class="stat reveal"><div class="v num">04</div><div class="k">Modules de formation</div></div>  
-    <div class="stat reveal"><div class="v num">06</div><div class="k">Facteurs de croissance</div></div>  
-    <div class="stat reveal"><div class="v num">12</div><div class="k">Cultures couvertes</div></div>  
-    <div class="stat reveal"><div class="v num"><i>≈</i>30<span style="font-size:.55em;letter-spacing:.06em"> s</span></div><div class="k">Par analyse foliaire</div></div>  
-  </div>  
-</div>
-
-  </section>
-<div class="ticker" aria-hidden="true">  
-    <div class="ticker-track" id="tickerTrack">  
-      <div class="ticker-item">Semis <span>✳</span> Irrigation <span>✳</span> Fertilité du sol <span>✳</span> Rotation des cultures <span>✳</span> Analyse foliaire <span>✳</span> Engrais organiques <span>✳</span> Moisson <span>✳</span></div>  
-      <div class="ticker-item">Semis <span>✳</span> Irrigation <span>✳</span> Fertilité du sol <span>✳</span> Rotation des cultures <span>✳</span> Analyse foliaire <span>✳</span> Engrais organiques <span>✳</span> Moisson <span>✳</span></div>  
-    </div>  
-  </div>    
-
-  <section id="parcours">
-    <div class="wrap">
-      <div class="sec-head">
-        <div>
-          <span class="num-tag reveal">Le parcours</span>
-          <h2 class="display reveal">Trois étapes,<br>une seule méthode</h2>
+    <header>
+        <div class="system-title">MNLOS // v1.0-PROO</div>
+        <div class="system-status">
+            <div class="status-dot"></div>
+            <span>ONLINE</span>
         </div>
-        <p class="lead reveal">Apprenez d'abord, testez ensuite, diagnostiquez enfin. Chaque étape a sa page : avancez dans l'ordre, ou allez droit à ce dont vous avez besoin.</p>
-      </div>
-      <div class="hub">
-        <div class="hub-card reveal">
-          <div class="hn num">01</div>
-          <h3>Académie des débutants</h3>
-          <p>Quatre modules pour maîtriser le cycle complet, de la mise en terre à la moisson.</p>
-          <ul>
-            <li><a href="cours-sol.html">Analyse &amp; fertilité du sol <span>45 min</span></a></li>
-            <li><a href="cours-semis.html">Calendrier des semis <span>60 min</span></a></li>
-            <li><a href="cours-entretien.html">Entretien, eau &amp; engrais <span>60 min</span></a></li>
-            <li><a href="cours-moisson.html">Moisson &amp; maturité <span>35 min</span></a></li>
-          </ul>
-          <a href="academie.html" class="hub-go">Voir l'Académie <span>&rarr;</span></a>
+    </header>
+
+    <main>
+        <!-- Widget Horloge / Statut -->
+        <div class="glass-card">
+            <div class="card-title">
+                <span>Temps Système</span>
+                <span>UTC+1</span>
+            </div>
+            <div class="holo-value" id="clock-display">00:00:00</div>
+            <div class="holo-subtext" id="date-display">Initialisation calendrier...</div>
         </div>
-        <div class="hub-card reveal">
-          <div class="hn num">02</div>
-          <h3>Ce qu'il faut pour qu'elle grandisse</h3>
-          <p>Les six facteurs de croissance avec leurs zones optimales, puis un simulateur : réglez lumière, eau, température et azote, et regardez la plante réagir.</p>
-          <a href="croissance.html" class="hub-go">Ouvrir le simulateur <span>&rarr;</span></a>
+
+        <!-- Widget Assistant MNLOS AI -->
+        <div class="glass-card">
+            <div class="card-title">
+                <span>Assistant Neuronal</span>
+                <span>Mode Local</span>
+            </div>
+            <div class="assistant-box">
+                <div class="assistant-log" id="assistant-log">
+                    <p class="ai-msg">> MNLOS Core initialisé avec succès.</p>
+                    <p class="ai-msg">> Tapez "aide", "statut" ou posez une question dans la console ci-dessous.</p>
+                </div>
+                <div class="assistant-input-row">
+                    <input type="text" id="user-input" placeholder="Entrer une commande ou un message...">
+                    <button onclick="handleUserCommand()">EXEC</button>
+                </div>
+            </div>
         </div>
-        <div class="hub-card reveal">
-          <div class="hn num">03</div>
-          <h3>Diagnostic IA par photo</h3>
-          <p>Photographiez votre plante ou votre sol : l'assistant identifie l'espèce, estime le stade et propose l'engrais et l'arrosage adaptés.</p>
-          <a href="diagnostic.html" class="hub-go">Scanner une plante <span>&rarr;</span></a>
+
+        <!-- Widget Infos Matérielles simulées/réelles -->
+        <div class="glass-card">
+            <div class="card-title">
+                <span>Environnement Matériel</span>
+                <span>Tecno Spark</span>
+            </div>
+            <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">
+                <p>Plateforme : <span style="color: var(--text-main);">Mobile Web Container / PWA</span></p>
+                <p>Niveau de batterie : <span id="battery-status" style="color: var(--accent-cyan);">Analyse...</span></p>
+                <p>Connexion : <span id="network-status" style="color: var(--accent-cyan);">Vérification...</span></p>
+            </div>
         </div>
-      </div>
-    </div>
-    <div class="hub-gap"></div>
-  </section>
+    </main>
 
-<section class="chef" id="chef">  
-    <div class="chef-grid">  
-      <div class="chef-photos">  
-        <figure class="chef-frame">  
-          <img src="PDG1.png" alt="Chef Fortunat, fondateur d'AgriFortunat — vue 1"  
-               onerror="this.onerror=null;this.src='https://images.pexels.com/photos/33993456/pexels-photo-33993456.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940'">  
-          <figcaption class="cap">Parcelle Nord — 2025</figcaption>  
-        </figure>  
-        <figure class="chef-frame">  
-          <img src="PDG2.png" alt="Chef Fortunat, fondateur d'AgriFortunat — vue 2"  
-               onerror="this.onerror=null;this.src='https://images.pexels.com/photos/2382665/pexels-photo-2382665.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940'">  
-          <figcaption class="cap">Formation terrain — 2026</figcaption>  
-        </figure>  
-      </div>  
-      <div class="chef-quote">  
-        <span class="eyebrow">04 — Le mot du Chef</span>  
-        <h2 class="display" style="font-size:clamp(1.95rem,3.6vw,3rem);margin-top:1.15rem">Mot du Chef Fortunat</h2>  
-        <span class="ital">« La terre ne ment jamais à celui qui la travaille avec <span>rigueur et méthode</span>. Chez AgriFortunat, notre ambition est de marier le savoir-faire agricole traditionnel avec la puissance de l'intelligence artificielle pour garantir l'abondance de nos récoltes. »</span>  
-        <div class="chef-sign">  
-          <div>  
-            <div class="nm">Fortunat</div>  
-            <div class="rl">Fondateur &amp; Directeur Général</div>  
-          </div>  
-          <div class="chef-values">  
-            <span>Rigueur</span><span>Transmission</span><span>Innovation</span>  
-          </div>  
-        </div>  
-      </div>  
-    </div>  
-  </section>
-</main>
+    <nav class="system-dock">
+        <button class="dock-item active" onclick="switchTab('home')">
+            <span>⌂</span>
+            <span>Accueil</span>
+        </button>
+        <button class="dock-item" onclick="switchTab('ai')">
+            <span>✦</span>
+            <span>Assistant</span>
+        </button>
+        <button class="dock-item" onclick="switchTab('modules')">
+            <span>⚙</span>
+            <span>Modules</span>
+        </button>
+    </nav>
 
-<footer id="contact">  
-    <div class="wrap">  
-      <div class="foot-grid">  
-        <div class="foot-brand">  
-          <a href="index.html" class="logo">  
-            <svg class="seed" viewBox="0 0 32 32" fill="none" aria-hidden="true">  
-              <path d="M16 29V13" stroke="#14301F" stroke-width="2.1" stroke-linecap="round"/>  
-              <path d="M16 17C16 11 11.2 6.6 4.6 6.2 4.2 13 8.8 17.6 16 17Z" fill="#2F6B3F"/>  
-              <path d="M16 13.4C16 8.2 20.2 4.3 26.2 4 26.6 9.9 22.4 13.9 16 13.4Z" fill="#C2622D"/>  
-            </svg>  
-            Agri<em>Fortunat</em>  
-          </a>  
-          <p>Académie agricole, conseil de culture et assistant phytosanitaire intelligent. Pour celles et ceux qui veulent comprendre la terre avant de la travailler.</p>  
-        </div>  
-        <div class="foot">  
-          <h5>Formation</h5>  
-          <ul>  
-            <li><a href="cours-sol.html">Analyse du sol</a></li>  
-            <li><a href="cours-semis.html">Calendrier des semis</a></li>  
-            <li><a href="cours-entretien.html">Entretien &amp; engrais</a></li>  
-            <li><a href="cours-moisson.html">Moisson &amp; maturité</a></li>  
-          </ul>  
-        </div>  
-        <div class="foot">  
-          <h5>Outils</h5>  
-          <ul>  
-            <li><a href="croissance.html">Simulateur de croissance</a></li>  
-            <li><a href="diagnostic.html">Diagnostic par photo</a></li>  
-            <li><a href="croissance.html">Zones optimales</a></li>  
-            <li><a href="diagnostic.html">Suivi de parcelle</a></li>  
-          </ul>  
-        </div>  
-        <div class="foot">  
-          <h5>Contact</h5>  
-          <ul>  
-            <li><a href="mailto:contact@agrifortuna.com">contact@agrifortuna.com</a></li>  
-            <li><a href="tel:+22900000000">+229 00 00 00 00</a></li>  
-            <li><a href="index.html#chef">Le mot du Chef</a></li>  
-            <li><a href="diagnostic.html">Devenir partenaire</a></li>  
-          </ul>  
-        </div>  
-      </div>  
-      <div class="foot-note">  
-        <div class="warn">Les analyses par photo sont des estimations indicatives : confirmez sur le terrain avant tout traitement.</div>  
-        <div>© 2026 AgriFortunat — Tous droits réservés.</div>  
-      </div>  
-    </div>  
-  </footer>
+    <script>
+        // Horloge temps réel
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock-display').innerText = now.toLocaleTimeString();
+            document.getElementById('date-display').innerText = now.toLocaleDateString('fr-FR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
 
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
-<script src="js/common.js"></script>
+        // Analyse batterie & réseau via APIs Web
+        if ('navigator' in navigator && 'getBattery' in navigator) {
+            navigator.getBattery().then(battery => {
+                function updateBattery() {
+                    document.getElementById('battery-status').innerText = `${Math.round(battery.level * 100)}% ${battery.charging ? '(En charge)' : ''}`;
+                }
+                updateBattery();
+                battery.addEventListener('levelchange', updateBattery);
+                battery.addEventListener('chargingchange', updateBattery);
+            });
+        } else {
+            document.getElementById('battery-status').innerText = "Non exposé par le navigateur";
+        }
 
+        const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+        if (connection) {
+            document.getElementById('network-status').innerText = `${connection.effectiveType.toUpperCase()} (${connection.downlink} Mbps)`;
+        } else {
+            document.getElementById('network-status').innerText = "Actif";
+        }
+
+        // Gestion de l'Assistant Logique
+        function handleUserCommand() {
+            const inputField = document.getElementById('user-input');
+            const logBox = document.getElementById('assistant-log');
+            const text = inputField.value.trim();
+            if (!text) return;
+
+            // Afficher le message utilisateur
+            logBox.innerHTML += `<p>> ${escapeHtml(text)}</p>`;
+            inputField.value = '';
+
+            // Réponse simulée intelligente
+            setTimeout(() => {
+                let response = "Commande reçue. Module en cours de développement.";
+                const lower = text.toLowerCase();
+
+                if (lower.includes('aide') || lower.includes('help')) {
+                    response = "Commandes disponibles : 'statut', 'bonjour', 'nettoyer', 'heure', 'auteur'.";
+                } else if (lower.includes('statut') || lower.includes('status')) {
+                    response = "Système MNLOS opérationnel. Intégrité visuelle 100%. Aucun service cloud tiers requis.";
+                } else if (lower.includes('bonjour') || lower.includes('salut')) {
+                    response = "Salutations, Fondateur. MNLOS est à votre écoute.";
+                } else if (lower.includes('heure')) {
+                    response = `Il est actuellement ${new Date().toLocaleTimeString()}.`;
+                } else if (lower.includes('auteur') || lower.includes('createur')) {
+                    response = "Projet MNLOS conçu et piloté par MANASSE NTAMBWA LUSHIKU.";
+                }
+
+                logBox.innerHTML += `<p class="ai-msg">> ${response}</p>`;
+                logBox.scrollTop = logBox.scrollHeight;
+            }, 300);
+
+            logBox.scrollTop = logBox.scrollHeight;
+        }
+
+        function escapeHtml(string) {
+            return string.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
+        // Permettre la validation par touche Entrée
+        document.getElementById('user-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                handleUserCommand();
+            }
+        });
+
+        function switchTab(tab) {
+            document.querySelectorAll('.dock-item').forEach(el => el.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+        }
+    </script>
 </body>
 </html>
