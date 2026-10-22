@@ -1,402 +1,1392 @@
-here<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MNLOS — Système Personnel Intelligent</title>
-    <style>
-        :root {
-            --bg-primary: #050B14;
-            --surface-translucent: rgba(10, 25, 47, 0.45);
-            --surface-card: rgba(15, 35, 70, 0.25);
-            --accent-cyan: #8CF5FF;
-            --accent-blue: #5E9DFF;
-            --accent-gold: #F0C875;
-            --text-main: #F1F7FF;
-            --text-secondary: #8FA9CC;
-            --border-glow: rgba(140, 245, 255, 0.2);
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgriFortunat — Académie agricole &amp; diagnostic phyto intelligent</title>
+<meta name="description" content="AgriFortunat : apprenez les bases de l'agriculture, comprenez ce qu'il faut pour qu'une plante grandisse, et diagnostiquez vos cultures avec l'assistant phyto intelligent.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400;1,9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{  
+    --paper:#F5EFE2;  
+    --paper-2:#FBF7EF;  
+    --ink:#14301F;  
+    --ink-2:#0D2116;  
+    --sap:#2F6B3F;  
+    --clay:#C2622D;  
+    --clay-soft:#E8C9AE;  
+    --rule:#D9CDB4;  
+    --muted:#5D6653;  
+    --rail:86px;  
+    --maxw:1240px;  
+    --ease:cubic-bezier(.16,1,.3,1);  
+    --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.32'/%3E%3C/svg%3E");  
+  }  
+  *{margin:0;padding:0;box-sizing:border-box}  
+  html{scroll-behavior:smooth;scroll-padding-top:118px;-webkit-text-size-adjust:100%}  
+  body{  
+    font-family:'Plus Jakarta Sans',system-ui,sans-serif;  
+    background:var(--paper);  
+    color:var(--ink);  
+    line-height:1.62;  
+    overflow-x:hidden;  
+  }  
+  body::before{  
+    content:"";position:fixed;inset:0;background-image:var(--grain);  
+    background-size:300px 300px;pointer-events:none;z-index:9999;  
+    opacity:.5;mix-blend-mode:multiply;  
+  }  
+  img{display:block;max-width:100%}  
+  a{color:inherit;text-decoration:none}  
+  button,input{font:inherit;color:inherit}  
+  ::selection{background:var(--clay);color:#fff}  /* ---------- typographic helpers ---------- */
+.display{font-family:'Fraunces',Georgia,serif;font-weight:900;line-height:.94;letter-spacing:-.022em}
+.eyebrow{
+font-size:.72rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+color:var(--clay);display:flex;align-items:center;gap:.75rem;
+}
+.eyebrow::before{content:"";width:34px;height:1px;background:var(--clay);flex:none}
+.num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+.lead{font-size:clamp(1.02rem,1.35vw,1.22rem);color:var(--muted);max-width:62ch}
+.ital{font-family:'Fraunces',Georgia,serif;font-style:italic;font-weight:400}
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
+/* ---------- rail (marge de classeur) ---------- */
+.rail{
+position:fixed;left:0;top:0;bottom:0;width:var(--rail);z-index:800;
+border-right:1px solid var(--rule);background:var(--paper-2);
+display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;
+}
+.rail-item{
+display:flex;flex-direction:column;align-items:center;gap:12px;
+font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;font-weight:600;
+color:#A2977F;transition:color .35s var(--ease);
+}
+.rail-item .rn{font-family:'Fraunces',serif;font-size:.86rem;letter-spacing:.06em}
+.rail-item .rl{writing-mode:vertical-rl;transform:rotate(180deg)}
+.rail-item:hover{color:var(--sap)}
+.rail-item.active{color:var(--ink)}
+.rail-item.active .rn{color:var(--clay)}
+.rail-mark{
+position:absolute;left:-1px;width:3px;height:0;background:var(--clay);
+transition:top .5s var(--ease),height .5s var(--ease);
+}
 
-        body {
-            background-color: var(--bg-primary);
-            color: var(--text-main);
-            min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
-            background-image: 
-                radial-gradient(circle at 50% 10%, rgba(94, 157, 255, 0.08) 0%, transparent 60%),
-                radial-gradient(circle at 20% 90%, rgba(140, 245, 255, 0.05) 0%, transparent 50%);
-        }
+/* ---------- header ---------- */
+header{
+position:fixed;top:0;left:var(--rail);right:0;z-index:900;
+background:rgba(245,239,226,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+border-bottom:1px solid var(--rule);transition:padding .4s var(--ease),background .4s var(--ease);
+}
+.nav{
+max-width:var(--maxw);margin:0 auto;padding:1.15rem clamp(1.1rem,3vw,2.4rem);
+display:flex;align-items:center;justify-content:space-between;gap:1.5rem;
+transition:padding .4s var(--ease);
+}
+header.shrunk .nav{padding-top:.7rem;padding-bottom:.7rem}
+.logo{display:flex;align-items:center;gap:.65rem;font-family:'Fraunces',serif;font-weight:900;font-size:1.32rem;letter-spacing:-.02em}
+.logo .seed{width:30px;height:30px;flex:none}
+.logo em{font-style:normal;color:var(--clay)}
+.nav-links{display:flex;gap:2.1rem;list-style:none;align-items:center}
+.nav-links a{
+font-size:.82rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;
+position:relative;padding:.35rem 0;color:var(--ink);
+}
+.nav-links a::after{
+content:"";position:absolute;left:0;bottom:0;height:1.5px;width:100%;background:var(--clay);
+transform:scaleX(0);transform-origin:right;transition:transform .42s var(--ease);
+}
+.nav-links a:hover::after{transform:scaleX(1);transform-origin:left}
+.btn{
+display:inline-flex;align-items:center;gap:.65rem;cursor:pointer;border:1px solid transparent;
+font-size:.82rem;font-weight:700;letter-spacing:.11em;text-transform:uppercase;
+padding:.85rem 1.55rem;border-radius:2px;transition:all .38s var(--ease);white-space:nowrap;
+}
+.btn-solid{background:var(--ink);color:var(--paper)}
+.btn-solid:hover{background:var(--clay);transform:translateY(-2px)}
+.btn-clay{background:var(--clay);color:#fff}
+.btn-clay:hover{background:var(--ink);transform:translateY(-2px)}
+.btn-ghost{border-color:var(--ink);color:var(--ink);background:transparent}
+.btn-ghost:hover{background:var(--ink);color:var(--paper)}
+.btn-line{background:transparent;color:var(--paper);border-color:rgba(245,239,226,.42)}
+.btn-line:hover{background:var(--paper);color:var(--ink);border-color:var(--paper)}
+.burger{display:none;width:44px;height:38px;border:1px solid var(--rule);background:transparent;cursor:pointer;align-items:center;justify-content:center;flex-direction:column;gap:5px}
+.burger span{width:19px;height:1.6px;background:var(--ink);display:block;transition:transform .35s var(--ease),opacity .3s}
+.burger.open span:nth-child(1){transform:translateY(6.6px) rotate(45deg)}
+.burger.open span:nth-child(2){opacity:0}
+.burger.open span:nth-child(3){transform:translateY(-6.6px) rotate(-45deg)}
+.mobile-menu{
+display:none;flex-direction:column;gap:.25rem;padding:0 clamp(1.1rem,3vw,2.4rem) 1.4rem;
+background:var(--paper-2);border-bottom:1px solid var(--rule);
+}
+.mobile-menu a{padding:.85rem 0;border-bottom:1px solid var(--rule);font-weight:600;letter-spacing:.08em;text-transform:uppercase;font-size:.82rem}
+.mobile-menu.open{display:flex}
 
-        /* Effet de grille spatiale subtile en arrière-plan */
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-image: linear-gradient(rgba(140, 245, 255, 0.02) 1px, transparent 1px),
-                              linear-gradient(90deg, rgba(140, 245, 255, 0.02) 1px, transparent 1px);
-            background-size: 30px 30px;
-            z-index: -1;
-        }
+main{margin-left:var(--rail)}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 clamp(1.1rem,3vw,2.4rem)}
+section{position:relative}
 
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px;
-            border-bottom: 1px solid var(--border-glow);
-            backdrop-filter: blur(10px);
-            background: rgba(5, 11, 20, 0.6);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+/* ---------- hero ---------- */
+.hero{padding-top:calc(86px + 2.2rem);position:relative}
+.hero-top{display:flex;align-items:flex-end;justify-content:space-between;gap:2rem;flex-wrap:wrap;margin-bottom:1.9rem}
+.hero-title{font-size:clamp(2.55rem,7.2vw,5.6rem);max-width:15ch}
+.hero-title .accent{color:var(--clay);font-style:italic;font-weight:700}
+.hero-title .under{position:relative;display:inline-block}
+.hero-title .under svg{position:absolute;left:0;right:0;bottom:-.12em;width:100%;height:.28em}
+.hero-note{max-width:24rem;border-left:2px solid var(--clay);padding-left:1.15rem;font-size:.95rem;color:var(--muted)}
+.hero-note strong{color:var(--ink);display:block;font-size:.76rem;letter-spacing:.2em;text-transform:uppercase;margin-bottom:.45rem}
 
-        .system-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            color: var(--accent-cyan);
-            text-shadow: 0 0 10px rgba(140, 245, 255, 0.4);
-        }
+.hero-band{position:relative}
+.hero-media{
+position:relative;height:clamp(330px,56vh,560px);overflow:hidden;
+border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
+}
+.hero-media img{width:100%;height:100%;object-fit:cover;object-position:center 58%;filter:saturate(.92) contrast(1.03)}
+.hero-media::after{
+content:"";position:absolute;inset:0;
+background:linear-gradient(90deg,rgba(20,48,31,.55) 0%,rgba(20,48,31,.12) 42%,rgba(20,48,31,0) 70%);
+}
+.hero-plate{
+position:absolute;left:clamp(1.1rem,3vw,2.4rem);bottom:-2.6rem;z-index:5;
+background:var(--ink);color:var(--paper);padding:1.9rem 2.1rem;max-width:min(560px,84%);
+border-bottom:3px solid var(--clay);
+}
+.hero-plate p{font-size:1.02rem;color:rgba(245,239,226,.82);margin-bottom:1.35rem;max-width:44ch}
+.hero-actions{display:flex;gap:.85rem;flex-wrap:wrap}
+.hero-badge{
+position:absolute;right:clamp(1.1rem,3vw,2.4rem);top:1.6rem;z-index:5;
+background:var(--paper-2);border:1px solid var(--rule);padding:.75rem 1.15rem;
+font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;font-weight:700;
+}
+.hero-badge b{color:var(--clay)}
 
-        .system-status {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
+.stats{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--rule);margin-top:4.6rem}
+.stat{padding:1.85rem 1.4rem 1.85rem 0;border-right:1px solid var(--rule)}
+.stat:last-child{border-right:none}
+.stat .v{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(1.95rem,3.4vw,2.85rem);line-height:1;letter-spacing:-.03em}
+.stat .v i{font-style:normal;color:var(--clay)}
+.stat .k{font-size:.71rem;letter-spacing:.19em;text-transform:uppercase;color:var(--muted);margin-top:.55rem}
 
-        .status-dot {
-            width: 7px;
-            height: 7px;
-            background-color: var(--accent-cyan);
-            border-radius: 50%;
-            box-shadow: 0 0 8px var(--accent-cyan);
-            animation: pulse 2s infinite;
-        }
+/* ---------- ticker ---------- */
+.ticker{background:var(--ink);color:var(--paper);overflow:hidden;padding:.95rem 0;border-bottom:1px solid var(--ink-2)}
+.ticker-track{display:flex;width:max-content;animation:slide 44s linear infinite}
+.ticker:hover .ticker-track{animation-play-state:paused}
+.ticker-item{
+font-family:'Fraunces',serif;font-size:clamp(1.05rem,1.9vw,1.5rem);font-weight:400;
+padding:0 1.75rem;display:flex;align-items:center;gap:1.75rem;white-space:nowrap;
+}
+.ticker-item span{color:var(--clay);font-size:.85em}
+@keyframes slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-        @keyframes pulse {
-            0% { opacity: 0.4; }
-            50% { opacity: 1; }
-            100% { opacity: 0.4; }
-        }
+/* ---------- section head ---------- */
+.sec-head{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:clamp(1.6rem,5vw,4.5rem);align-items:end;padding:clamp(3.6rem,7vw,6.2rem) 0 2.6rem}
+.sec-head h2{font-size:clamp(2.15rem,4.7vw,3.75rem)}
+.sec-head .num-tag{font-family:'Fraunces',serif;font-size:.95rem;letter-spacing:.18em;color:var(--clay);margin-bottom:.95rem;display:block}
 
-        main {
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            max-width: 600px;
-            margin: 0 auto;
-            padding-bottom: 90px;
-        }
+/* ---------- registre / académie ---------- */
+.reg{border-top:1px solid var(--ink)}
+.row{border-bottom:1px solid var(--rule);position:relative}
+.row-head{
+display:grid;grid-template-columns:112px minmax(0,1.25fr) minmax(0,1fr) 150px;
+gap:1.5rem;align-items:center;padding:1.85rem 1.15rem 1.85rem 0;cursor:pointer;
+transition:background .42s var(--ease),padding .42s var(--ease);
+}
+.row:hover .row-head{background:var(--paper-2);padding-left:1.15rem}
+.row-n{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(2.1rem,4vw,3.15rem);line-height:.8;color:var(--rule);letter-spacing:-.04em;transition:color .42s var(--ease)}
+.row:hover .row-n,.row.open .row-n{color:var(--clay)}
+.row-t{font-family:'Fraunces',serif;font-weight:700;font-size:clamp(1.25rem,2.15vw,1.72rem);line-height:1.16;letter-spacing:-.015em}
+.row-d{color:var(--muted);font-size:.955rem}
+.row-meta{display:flex;flex-direction:column;align-items:flex-end;gap:.4rem;text-align:right}
+.chip{font-size:.68rem;letter-spacing:.17em;text-transform:uppercase;font-weight:700;border:1px solid var(--rule);padding:.32rem .72rem;color:var(--muted)}
+.chip.ok{border-color:var(--sap);color:var(--sap)}
+.row-toggle{width:34px;height:34px;border:1px solid var(--ink);display:grid;place-items:center;transition:all .42s var(--ease)}
+.row.open .row-toggle{background:var(--clay);border-color:var(--clay);transform:rotate(45deg)}
+.row-toggle svg{width:13px;height:13px}
+.row-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .52s var(--ease)}
+.row.open .row-body{grid-template-rows:1fr}
+.row-body>div{overflow:hidden}
+.row-inner{
+display:grid;grid-template-columns:112px minmax(0,1fr) minmax(0,1fr);gap:1.5rem;
+padding:0 1.15rem 2.15rem 0;
+}
+.row-inner ul{list-style:none;display:flex;flex-direction:column;gap:.62rem}
+.row-inner li{position:relative;padding-left:1.55rem;font-size:.955rem;color:var(--muted)}
+.row-inner li::before{content:"";position:absolute;left:0;top:.62em;width:9px;height:1px;background:var(--clay)}
+.row-inner li b{color:var(--ink);font-weight:600}
+.row-figure{position:relative;overflow:hidden;border:1px solid var(--rule);aspect-ratio:16/10}
+.row-figure img{width:100%;height:100%;object-fit:cover;transition:transform 1.1s var(--ease)}
+.row:hover .row-figure img{transform:scale(1.055)}
 
-        .glass-card {
-            background: var(--surface-card);
-            border: 1px solid var(--border-glow);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-            position: relative;
-            overflow: hidden;
-        }
+/* ---------- facteurs ---------- */
+.factors{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--ink);border-left:1px solid var(--rule)}
+.factor{padding:1.85rem 1.7rem;border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);background:var(--paper-2);transition:background .4s var(--ease)}
+.factor:hover{background:#fff}
+.factor .fi{width:38px;height:38px;color:var(--sap);margin-bottom:1.05rem}
+.factor h4{font-family:'Fraunces',serif;font-size:1.18rem;font-weight:700;margin-bottom:.5rem}
+.factor p{font-size:.915rem;color:var(--muted);margin-bottom:.95rem}
+.factor .opt{font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;font-weight:700;color:var(--clay);display:flex;justify-content:space-between;gap:1rem;border-top:1px dashed var(--rule);padding-top:.75rem}
 
-        .glass-card::after {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 1px;
-            background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
-        }
+/* ---------- simulateur (bande encre) ---------- */
+.sim{background:var(--ink);color:var(--paper);position:relative;overflow:hidden;margin-top:clamp(3.2rem,6vw,5.4rem)}
+.sim::before{
+content:"";position:absolute;inset:0;background-image:var(--grain);background-size:300px 300px;
+opacity:.22;mix-blend-mode:overlay;pointer-events:none;
+}
+.sim-grid{display:grid;grid-template-columns:minmax(0,1.02fr) minmax(0,1.18fr);gap:clamp(2rem,5vw,4.6rem);align-items:center;
+max-width:var(--maxw);margin:0 auto;padding:clamp(3.2rem,6vw,5.2rem) clamp(1.1rem,3vw,2.4rem)}
+.sim h3{font-family:'Fraunces',serif;font-size:clamp(1.85rem,3.3vw,2.75rem);line-height:1.06;letter-spacing:-.022em;margin:.95rem 0 1.05rem}
+.sim .eyebrow{color:var(--clay-soft)}
+.sim .eyebrow::before{background:var(--clay-soft)}
+.sim p.lead{color:rgba(245,239,226,.72)}
+.plant-stage{
+background:rgba(245,239,226,.055);border:1px solid rgba(245,239,226,.16);
+padding:1.35rem;display:flex;gap:1.4rem;align-items:center;
+}
+.plant-stage svg.plant{width:min(250px,42vw);height:auto;flex:none}
+.sim-readouts{display:flex;flex-direction:column;gap:.85rem;flex:1;min-width:0}
+.readout{border-bottom:1px solid rgba(245,239,226,.16);padding-bottom:.72rem}
+.readout .k{font-size:.665rem;letter-spacing:.21em;text-transform:uppercase;color:rgba(245,239,226,.55)}
+.readout .v{font-family:'Fraunces',serif;font-size:1.62rem;font-weight:700;line-height:1.12;letter-spacing:-.02em}
+.readout .v small{font-size:.85rem;font-weight:400;opacity:.6;letter-spacing:.04em}
+.gauge{height:5px;background:rgba(245,239,226,.16);margin-top:.55rem;overflow:hidden}
+.gauge i{display:block;height:100%;background:var(--clay);width:50%;transition:width .55s var(--ease),background .55s var(--ease)}
 
-        .card-title {
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: var(--text-secondary);
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-        }
+.sliders{margin-top:1.95rem;display:flex;flex-direction:column;gap:1.28rem}
+.slider-row .top{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;margin-bottom:.48rem}
+.slider-row .lbl{font-size:.735rem;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:rgba(245,239,226,.78)}
+.slider-row .val{font-family:'Fraunces',serif;font-size:1.02rem;font-weight:700;color:var(--clay-soft);font-variant-numeric:tabular-nums}
+input[type=range]{
+-webkit-appearance:none;appearance:none;width:100%;height:22px;background:transparent;cursor:pointer;
+}
+input[type=range]::-webkit-slider-runnable-track{height:2px;background:rgba(245,239,226,.28)}
+input[type=range]::-moz-range-track{height:2px;background:rgba(245,239,226,.28)}
+input[type=range]::-webkit-slider-thumb{
+-webkit-appearance:none;appearance:none;width:16px;height:16px;background:var(--clay);
+border:2px solid var(--ink);margin-top:-7px;transition:transform .22s var(--ease);
+}
+input[type=range]::-moz-range-thumb{width:16px;height:16px;background:var(--clay);border:2px solid var(--ink);border-radius:0}
+input[type=range]:hover::-webkit-slider-thumb{transform:scale(1.25)}
+input[type=range]:focus-visible{outline:2px solid var(--clay-soft);outline-offset:4px}
+.verdict{
+margin-top:1.85rem;border-left:3px solid var(--clay);background:rgba(245,239,226,.07);
+padding:1.15rem 1.35rem;font-size:.955rem;color:rgba(245,239,226,.88);
+}
+.verdict b{display:block;font-family:'Fraunces',serif;font-size:1.06rem;color:var(--paper);margin-bottom:.35rem;font-weight:700}
+.presets{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1.35rem}
+.preset{
+background:transparent;border:1px solid rgba(245,239,226,.3);color:rgba(245,239,226,.82);
+padding:.52rem 1.02rem;font-size:.715rem;letter-spacing:.16em;text-transform:uppercase;font-weight:700;
+cursor:pointer;transition:all .34s var(--ease);
+}
+.preset:hover,.preset.on{background:var(--clay);border-color:var(--clay);color:#fff}
 
-        .holo-value {
-            font-size: 1.8rem;
-            font-weight: 600;
-            color: var(--text-main);
-            text-shadow: 0 0 15px rgba(241, 247, 255, 0.2);
-        }
+/* plant svg animation vars */
+.plant{--grow:.62;--leafs:.9;--leaf:#57A45F;--stem:#7FBF7A}
+.plant .stem{transform-box:view-box;transform-origin:160px 302px;transform:scaleY(var(--grow));transition:transform .75s var(--ease)}
+.plant .leafwrap{transform-box:fill-box;transform-origin:left center;transform:scale(calc(.32 + .68 * var(--grow)));transition:transform .75s var(--ease)}
+.plant .leafwrap.mirror{transform-origin:left center;transform:scale(calc(.32 + .68 * var(--grow))) scaleX(-1)}
+.plant .leaf{fill:var(--leaf);transition:fill .75s var(--ease),transform .75s var(--ease)}
+.plant.wilt .leafwrap{transform:scale(calc(.32 + .68 * var(--grow))) rotate(19deg)}
+.plant.wilt .leafwrap.mirror{transform:scale(calc(.32 + .68 * var(--grow))) scaleX(-1) rotate(19deg)}
+.plant .root{stroke:var(--stem);opacity:.62;transition:stroke .75s var(--ease)}
+.plant .drop{fill:#8FC7E8;opacity:0}
+.plant.wet .drop{animation:fall 2.4s linear infinite}
+.plant.wet .drop:nth-of-type(2){animation-delay:.8s}
+.plant.wet .drop:nth-of-type(3){animation-delay:1.55s}
+@keyframes fall{0%{opacity:0;transform:translateY(-14px)}22%{opacity:.85}100%{opacity:0;transform:translateY(46px)}}
 
-        .holo-subtext {
-            font-size: 0.85rem;
-            color: var(--accent-cyan);
-            margin-top: 5px;
-        }
+/* ---------- diagnostic IA ---------- */
+.diag{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);gap:clamp(1.6rem,3.6vw,3.1rem);align-items:start;padding-bottom:clamp(3.4rem,6vw,5.6rem)}
+.drop{
+border:1.5px dashed var(--clay);background:var(--paper-2);padding:2.35rem 1.85rem;text-align:center;
+cursor:pointer;transition:all .42s var(--ease);position:relative;overflow:hidden;
+}
+.drop:hover,.drop.over{background:#fff;border-color:var(--sap);transform:translateY(-3px)}
+.drop .cam{width:60px;height:60px;margin:0 auto 1.15rem;color:var(--sap)}
+.drop h3{font-family:'Fraunces',serif;font-size:1.42rem;font-weight:700;margin-bottom:.42rem}
+.drop p{font-size:.925rem;color:var(--muted);margin-bottom:1.35rem}
+.preview{margin-top:1.25rem;position:relative;display:none}
+.preview img{width:100%;height:230px;object-fit:cover;border:1px solid var(--rule)}
+.preview .tag{position:absolute;left:0;bottom:0;background:var(--ink);color:var(--paper);font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;padding:.42rem .85rem}
+.log{margin-top:1.15rem;border:1px solid var(--rule);background:#fff;padding:1.05rem 1.15rem;font-size:.815rem;min-height:104px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--muted)}
+.log div{opacity:0;transform:translateY(6px);animation:logIn .45s var(--ease) forwards}
+.log div::before{content:"› ";color:var(--clay)}
+@keyframes logIn{to{opacity:1;transform:none}}
 
-        /* Console / Assistant Section */
-        .assistant-box {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
+.report{border:1px solid var(--ink);background:var(--paper-2)}
+.report-head{background:var(--ink);color:var(--paper);padding:1.25rem 1.55rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
+.report-head h3{font-family:'Fraunces',serif;font-size:1.24rem;font-weight:700;display:flex;align-items:center;gap:.72rem}
+.report-head .rid{font-size:.715rem;letter-spacing:.18em;text-transform:uppercase;opacity:.72}
+.pulse{width:9px;height:9px;background:var(--clay);border-radius:50%;animation:pulse 1.7s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.72)}}
+.report-body{padding:1.55rem}
+.rline{display:flex;justify-content:space-between;align-items:baseline;gap:1.25rem;padding:.82rem 0;border-bottom:1px solid var(--rule)}
+.rline .k{font-size:.715rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);flex:none}
+.rline .v{font-weight:600;text-align:right;font-size:.985rem}
+.ring-wrap{display:flex;align-items:center;gap:1.55rem;margin-top:1.55rem;flex-wrap:wrap}
+.ring{width:118px;height:118px;flex:none;position:relative}
+.ring svg{transform:rotate(-90deg)}
+.ring .rv{position:absolute;inset:0;display:grid;place-items:center;font-family:'Fraunces',serif;font-size:1.58rem;font-weight:900}
+.ring-cap{flex:1;min-width:190px}
+.ring-cap .k{font-size:.715rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.ring-cap h4{font-family:'Fraunces',serif;font-size:1.32rem;font-weight:700;margin:.35rem 0 .48rem;line-height:1.16}
+.ring-cap p{font-size:.925rem;color:var(--muted)}
+.care{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-top:1.55rem}
+.care div{border:1px solid var(--rule);padding:.92rem .95rem;background:#fff}
+.care .k{font-size:.655rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.care .v{font-family:'Fraunces',serif;font-weight:700;font-size:1.02rem;margin-top:.22rem;line-height:1.2}
+.report-actions{display:flex;gap:.72rem;flex-wrap:wrap;margin-top:1.55rem}
+.mini{font-size:.715rem;letter-spacing:.17em;text-transform:uppercase;font-weight:700;padding:.42rem .85rem;border:1px solid var(--rule);color:var(--muted)}
 
-        .assistant-log {
-            background: rgba(2, 6, 12, 0.6);
-            border: 1px solid rgba(94, 157, 255, 0.15);
-            border-radius: 10px;
-            padding: 12px;
-            height: 120px;
-            overflow-y: auto;
-            font-family: monospace;
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-        }
+/* ---------- chef ---------- */
+.chef{background:var(--ink);color:var(--paper);position:relative;overflow:hidden}
+.chef::before{content:"";position:absolute;inset:0;background-image:var(--grain);background-size:300px 300px;opacity:.2;mix-blend-mode:overlay;pointer-events:none}
+.chef-grid{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:clamp(2rem,5vw,4.4rem);align-items:center;
+max-width:var(--maxw);margin:0 auto;padding:clamp(3.4rem,6.5vw,5.8rem) clamp(1.1rem,3vw,2.4rem)}
+.chef-photos{display:flex;gap:1.15rem}
+.chef-frame{flex:1;border:1px solid rgba(245,239,226,.24);padding:.62rem;background:rgba(245,239,226,.06);transition:transform .6s var(--ease)}
+.chef-frame:first-child{transform:rotate(-1.7deg)}
+.chef-frame:last-child{transform:rotate(1.7deg) translateY(1.55rem)}
+.chef-frame:hover{transform:rotate(0) translateY(-.45rem)}
+.chef-frame img{width:100%;aspect-ratio:3/4;object-fit:cover;object-position:center 28%;filter:saturate(.94) contrast(1.04)}
+.chef-frame .cap{font-size:.655rem;letter-spacing:.19em;text-transform:uppercase;color:rgba(245,239,226,.55);padding:.62rem .25rem .18rem}
+.chef-quote .ital{font-size:clamp(1.42rem,2.85vw,2.28rem);line-height:1.32;color:var(--paper);display:block;margin:1.35rem 0 1.65rem;letter-spacing:-.015em}
+.chef-quote .ital span{color:var(--clay-soft)}
+.chef-sign{display:flex;align-items:center;gap:1.15rem;flex-wrap:wrap;border-top:1px solid rgba(245,239,226,.18);padding-top:1.35rem}
+.chef-sign .nm{font-family:'Fraunces',serif;font-size:1.28rem;font-weight:700}
+.chef-sign .rl{font-size:.715rem;letter-spacing:.21em;text-transform:uppercase;color:rgba(245,239,226,.6)}
+.chef-values{display:flex;gap:.55rem;flex-wrap:wrap;margin-left:auto}
+.chef-values span{font-size:.675rem;letter-spacing:.17em;text-transform:uppercase;border:1px solid rgba(245,239,226,.28);padding:.42rem .85rem}
 
-        .assistant-log p {
-            margin-bottom: 6px;
-        }
+/* ---------- footer ---------- */
+footer{background:var(--paper-2);border-top:1px solid var(--rule);margin-left:var(--rail)}
+.foot-grid{display:grid;grid-template-columns:minmax(0,1.4fr) repeat(3,minmax(0,1fr));gap:2.25rem;padding:clamp(3rem,5.5vw,4.6rem) 0 2.25rem}
+.foot h5{font-size:.715rem;letter-spacing:.21em;text-transform:uppercase;color:var(--muted);margin-bottom:1.15rem}
+.foot ul{list-style:none;display:flex;flex-direction:column;gap:.62rem}
+.foot li a{font-size:.945rem;position:relative;transition:color .3s}
+.foot li a:hover{color:var(--clay)}
+.foot-brand .logo{margin-bottom:1.05rem}
+.foot-brand p{font-size:.945rem;color:var(--muted);max-width:34ch}
+.foot-note{border-top:1px solid var(--rule);padding:1.35rem 0 2.25rem;display:flex;justify-content:space-between;gap:1.25rem;flex-wrap:wrap;font-size:.815rem;color:var(--muted)}
+.foot-note .warn{border-left:2px solid var(--clay);padding-left:.85rem;max-width:62ch}
+.reveal{will-change:transform,opacity}
 
-        .assistant-log .ai-msg {
-            color: var(--accent-cyan);
-        }
+/* ---------- responsive ---------- */
+@media (max-width:1180px){
+:root{--rail:0px}
+.rail{display:none}
+header{left:0}
+main,footer{margin-left:0}
+}
+@media (max-width:1024px){
+.sec-head{grid-template-columns:1fr;gap:1.35rem}
+.sim-grid,.chef-grid,.diag{grid-template-columns:1fr}
+.factors{grid-template-columns:repeat(2,1fr)}
+.row-head{grid-template-columns:78px minmax(0,1fr) 132px;gap:1.05rem}
+.row-d{display:none}
+.row-inner{grid-template-columns:78px minmax(0,1fr);gap:1.05rem}
+.row-figure{grid-column:1/-1}
+.foot-grid{grid-template-columns:repeat(2,1fr)}
+.chef-frame:last-child{transform:rotate(1.7deg)}
+}
+@media (max-width:760px){
+.nav-links,.nav .btn{display:none}
+.burger{display:flex}
+.hero{padding-top:calc(74px + 1.4rem)}
+.hero-plate{position:static;max-width:100%;margin-top:0;bottom:auto;left:auto}
+.hero-media{height:clamp(250px,42vh,360px)}
+.hero-badge{display:none}
+.stats{grid-template-columns:repeat(2,1fr);margin-top:0}
+.stat{padding:1.35rem 1.15rem 1.35rem 0}
+.stat:nth-child(2){border-right:none}
+.stat:nth-child(1),.stat:nth-child(2){border-bottom:1px solid var(--rule)}
+.factors{grid-template-columns:1fr}
+.plant-stage{flex-direction:column;align-items:stretch}
+.plant-stage svg.plant{width:min(210px,62vw);margin:0 auto}
+.care{grid-template-columns:1fr 1fr}
+.row-head{grid-template-columns:56px minmax(0,1fr) 46px;padding:1.35rem 0}
+.row-meta{flex-direction:row;align-items:center;justify-content:flex-end;gap:.55rem}
+.row-meta .chip{display:none}
+.row-inner{grid-template-columns:1fr;padding-right:0}
+.foot-grid{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){
+*{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.15s!important;scroll-behavior:auto!important}
+}
 
-        .assistant-input-row {
-            display: flex;
-            gap: 10px;
-        }
+/* =========================================================
+   AgriFortunat — ajouts pour les pages séparées et les cours
+   (mêmes variables, mêmes polices que style.css)
+   ========================================================= */
 
-        input[type="text"] {
-            flex: 1;
-            background: rgba(10, 25, 47, 0.8);
-            border: 1px solid var(--border-glow);
-            border-radius: 10px;
-            padding: 12px 15px;
-            color: var(--text-main);
-            font-size: 0.9rem;
-            outline: none;
-            transition: all 0.3s ease;
-        }
+.page-pad{padding-top:86px}
+.page-end{padding-bottom:clamp(3.4rem,6vw,5.6rem)}
 
-        input[type="text"]:focus {
-            border-color: var(--accent-cyan);
-            box-shadow: 0 0 10px rgba(140, 245, 255, 0.2);
-        }
+/* ---------- lien de cours dans le registre ---------- */
+.course-col{display:flex;flex-direction:column;gap:1.35rem;align-items:flex-start}
+.course-col ul{width:100%}
 
-        button {
-            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
-            border: none;
-            border-radius: 10px;
-            color: var(--bg-primary);
-            font-weight: 700;
-            padding: 0 20px;
-            cursor: pointer;
-            transition: transform 0.1s ease, box-shadow 0.3s ease;
-            box-shadow: 0 0 15px rgba(140, 245, 255, 0.3);
-        }
+/* ---------- accueil : parcours ---------- */
+.hub{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--ink);border-left:1px solid var(--rule)}
+.hub-card{display:flex;flex-direction:column;padding:2rem 1.8rem;border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);background:var(--paper-2);transition:background .4s var(--ease)}
+.hub-card:hover{background:#fff}
+.hub-card .hn{font-family:'Fraunces',serif;font-weight:900;font-size:2.6rem;line-height:.9;color:var(--rule);letter-spacing:-.04em;transition:color .4s var(--ease)}
+.hub-card:hover .hn{color:var(--clay)}
+.hub-card h3{font-family:'Fraunces',serif;font-size:1.45rem;font-weight:700;line-height:1.15;margin:1rem 0 .55rem;letter-spacing:-.015em}
+.hub-card p{font-size:.93rem;color:var(--muted);margin-bottom:1.1rem}
+.hub-card ul{list-style:none;display:flex;flex-direction:column;margin-bottom:1.4rem}
+.hub-card li a{display:flex;justify-content:space-between;gap:1rem;padding:.55rem 0;border-bottom:1px solid var(--rule);font-size:.9rem;font-weight:600;transition:color .3s,padding .3s var(--ease)}
+.hub-card li a span{color:var(--muted);font-weight:500;font-size:.8rem}
+.hub-card li a:hover{color:var(--clay);padding-left:.4rem}
+.hub-go{margin-top:auto;display:flex;justify-content:space-between;align-items:center;gap:1rem;border-top:1px dashed var(--rule);padding-top:.85rem;font-size:.74rem;letter-spacing:.17em;text-transform:uppercase;font-weight:700;color:var(--clay)}
+.hub-go:hover{color:var(--ink)}
+.hub-gap{height:clamp(3.2rem,6vw,5.4rem)}
 
-        button:active {
-            transform: scale(0.96);
-        }
+/* ---------- bandeau « étape suivante » ---------- */
+.next-step{background:var(--ink);color:var(--paper)}
+.next-step .wrap{display:flex;justify-content:space-between;align-items:center;gap:1.5rem;flex-wrap:wrap;padding-top:2.8rem;padding-bottom:2.8rem}
+.next-step .eyebrow{color:var(--clay-soft)}
+.next-step .eyebrow::before{background:var(--clay-soft)}
+.next-step h3{font-family:'Fraunces',serif;font-size:clamp(1.45rem,2.7vw,2.1rem);font-weight:700;line-height:1.1;letter-spacing:-.02em;margin-top:.7rem;max-width:26ch}
 
-        /* Dock de navigation bas */
-        nav.system-dock {
-            position: fixed;
-            bottom: 15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: calc(100% - 40px);
-            max-width: 450px;
-            background: rgba(5, 11, 20, 0.75);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--border-glow);
-            border-radius: 20px;
-            display: flex;
-            justify-content: space-around;
-            padding: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            z-index: 100;
-        }
+/* ---------- pages de cours ---------- */
+.course{display:grid;grid-template-columns:250px minmax(0,1fr);gap:clamp(1.6rem,4vw,3.6rem);align-items:start;padding-bottom:clamp(3rem,6vw,5rem)}
+.toc{position:sticky;top:112px;border-top:1px solid var(--ink)}
+.toc-title{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:var(--clay);padding:.9rem 0 .5rem}
+.toc a{display:grid;grid-template-columns:34px minmax(0,1fr);gap:.5rem;padding:.8rem 0;border-bottom:1px solid var(--rule);font-size:.88rem;font-weight:600;line-height:1.35;color:var(--muted);transition:color .3s var(--ease)}
+.toc a b{font-family:'Fraunces',serif;color:var(--rule);transition:color .3s var(--ease)}
+.toc a:hover,.toc a.on{color:var(--ink)}
+.toc a.on b,.toc a:hover b{color:var(--clay)}
 
-        .dock-item {
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 0.75rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            cursor: pointer;
-            box-shadow: none;
-            padding: 0;
-        }
+.lesson{padding:2.1rem 0 2.3rem;border-bottom:1px solid var(--rule)}
+.lesson:first-child{border-top:1px solid var(--ink);padding-top:1.7rem}
+.lesson-head{display:flex;align-items:baseline;gap:1.2rem;margin-bottom:1.1rem}
+.lesson-n{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(2.1rem,4vw,3.15rem);line-height:.8;color:var(--clay);letter-spacing:-.04em}
+.lesson h3{font-family:'Fraunces',serif;font-weight:700;font-size:clamp(1.3rem,2.3vw,1.8rem);line-height:1.16;letter-spacing:-.015em}
+.lesson h4{font-family:'Fraunces',serif;font-size:1.08rem;font-weight:700;margin:1.5rem 0 .5rem}
+.lesson p{color:var(--muted);max-width:68ch;margin-bottom:.9rem}
+.lesson ul{list-style:none;display:flex;flex-direction:column;gap:.7rem;margin:.6rem 0 1rem;max-width:70ch}
+.lesson li{position:relative;padding-left:1.55rem;font-size:.97rem;color:var(--muted)}
+.lesson li::before{content:"";position:absolute;left:0;top:.72em;width:9px;height:1px;background:var(--clay)}
+.lesson li b{color:var(--ink);font-weight:600}
 
-        .dock-item.active {
-            color: var(--accent-cyan);
-            text-shadow: 0 0 8px var(--accent-cyan);
-        }
-    </style>
+.tbl-wrap{overflow-x:auto;margin:1.1rem 0 1.2rem;border:1px solid var(--rule);background:var(--paper-2);-webkit-overflow-scrolling:touch}
+.tbl{width:100%;border-collapse:collapse;font-size:.9rem;min-width:520px}
+.tbl th{text-align:left;background:var(--ink);color:var(--paper);padding:.72rem .95rem;font-size:.68rem;letter-spacing:.17em;text-transform:uppercase;font-weight:700}
+.tbl td{padding:.78rem .95rem;border-top:1px solid var(--rule);color:var(--muted);vertical-align:top}
+.tbl td:first-child{color:var(--ink);font-weight:600}
+.tbl-note{font-size:.8rem;color:var(--muted);margin:-.5rem 0 1rem}
+
+.callout{border-left:3px solid var(--clay);background:var(--paper-2);padding:1.1rem 1.3rem;margin:1.4rem 0 .4rem;font-size:.95rem;color:var(--muted);max-width:70ch}
+.callout b{display:block;font-family:'Fraunces',serif;font-size:1.06rem;color:var(--ink);margin-bottom:.3rem}
+
+.todo{border:1px solid var(--ink);background:var(--paper-2);margin-top:2.4rem}
+.todo-head{background:var(--ink);color:var(--paper);padding:1.05rem 1.4rem;font-family:'Fraunces',serif;font-weight:700;font-size:1.15rem}
+.todo ul{list-style:none;padding:.3rem 1.4rem .9rem}
+.todo label{display:flex;gap:.85rem;padding:.8rem 0;border-bottom:1px solid var(--rule);cursor:pointer;font-size:.95rem}
+.todo li:last-child label{border-bottom:none}
+.todo input{accent-color:var(--clay);width:18px;height:18px;margin-top:.2rem;flex:none}
+.todo input:checked + span{text-decoration:line-through;opacity:.55}
+
+.quiz{margin-top:2.4rem;border:1px solid var(--rule);background:#fff}
+.quiz-head{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;padding:1.05rem 1.4rem;border-bottom:1px solid var(--rule)}
+.quiz-head h3{font-family:'Fraunces',serif;font-size:1.2rem;font-weight:700}
+.quiz-score{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:var(--muted)}
+.quiz-score b{color:var(--clay)}
+.q{padding:1.3rem 1.4rem;border-bottom:1px solid var(--rule)}
+.q:last-of-type{border-bottom:none}
+.q .qt{font-family:'Fraunces',serif;font-weight:700;font-size:1.08rem;line-height:1.28;margin-bottom:.85rem}
+.opt-btn{display:block;width:100%;text-align:left;background:transparent;border:1px solid var(--rule);padding:.78rem 1rem;margin-bottom:.5rem;cursor:pointer;font-size:.93rem;transition:border-color .3s var(--ease),background .3s var(--ease)}
+.opt-btn:hover{border-color:var(--clay)}
+.opt-btn.good{border-color:var(--sap);background:rgba(47,107,63,.1)}
+.opt-btn.bad{border-color:#B3402A;background:rgba(179,64,42,.08)}
+.q .why{display:none;font-size:.9rem;color:var(--muted);margin-top:.7rem;padding-left:.9rem;border-left:2px solid var(--clay)}
+.q.done .why{display:block}
+.q.done .opt-btn{pointer-events:none}
+.quiz-result{display:none;padding:1.1rem 1.4rem;background:var(--paper-2);border-top:1px solid var(--rule);font-size:.95rem}
+.quiz-result.show{display:block}
+.quiz-result b{font-family:'Fraunces',serif;font-size:1.1rem}
+
+.course-nav{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-top:2.4rem}
+
+/* ---------- responsive ---------- */
+@media (max-width:1024px){
+  .course{grid-template-columns:minmax(0,1fr)}
+  .toc{position:static}
+  .hub{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:760px){
+  .page-pad{padding-top:74px}
+  .lesson-head{gap:.85rem}
+  .next-step .wrap{padding-top:2.2rem;padding-bottom:2.2rem}
+}
+
+/* ---------- onglets internes ---------- */
+.view{display:none}
+.view.active{display:block}
+
+</style>
 </head>
-<body>
+<body data-page="accueil">
 
-    <header>
-        <div class="system-title">MNLOS // v1.0-PROO</div>
-        <div class="system-status">
-            <div class="status-dot"></div>
-            <span>ONLINE</span>
+<nav class="rail" aria-label="Sommaire">  
+  <div class="rail-mark" id="railMark"></div>  
+  <a class="rail-item" href="#academie" data-rail="academie"><span class="rn">01</span><span class="rl">Académie</span></a>  
+  <a class="rail-item" href="#croissance" data-rail="croissance"><span class="rn">02</span><span class="rl">Croissance</span></a>  
+  <a class="rail-item" href="#diagnostic" data-rail="diagnostic"><span class="rn">03</span><span class="rl">Diagnostic</span></a>  
+  <a class="rail-item" href="#chef" data-rail="chef"><span class="rn">04</span><span class="rl">Le Chef</span></a>  
+  <a class="rail-item" href="#contact" data-rail="contact"><span class="rn">05</span><span class="rl">Contact</span></a>  
+</nav>
+
+<header id="header">  
+  <div class="nav">  
+    <a href="#accueil" class="logo" aria-label="AgriFortunat, accueil">  
+      <svg class="seed" viewBox="0 0 32 32" fill="none" aria-hidden="true">  
+        <path d="M16 29V13" stroke="#14301F" stroke-width="2.1" stroke-linecap="round"/>  
+        <path d="M16 17C16 11 11.2 6.6 4.6 6.2 4.2 13 8.8 17.6 16 17Z" fill="#2F6B3F"/>  
+        <path d="M16 13.4C16 8.2 20.2 4.3 26.2 4 26.6 9.9 22.4 13.9 16 13.4Z" fill="#C2622D"/>  
+      </svg>  
+      Agri<em>Fortunat</em>  
+    </a>  
+    <ul class="nav-links">  
+      <li><a href="#academie">Académie</a></li>  
+      <li><a href="#croissance">Ce qu'il faut pour grandir</a></li>  
+      <li><a href="#diagnostic">Diagnostic IA</a></li>  
+      <li><a href="#chef">Le mot du Chef</a></li>  
+    </ul>  
+    <a href="#diagnostic" class="btn btn-solid">Scanner une plante  
+      <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>  
+    </a>  
+    <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false"><span></span><span></span><span></span></button>  
+  </div>  
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#accueil">Accueil</a>  
+    <a href="#academie">Académie des débutants</a>  
+    <a href="#croissance">Ce qu'il faut pour grandir</a>  
+    <a href="#diagnostic">Diagnostic IA</a>  
+    <a href="#chef">Le mot du Chef</a>  
+    <a href="#contact">Contact</a>  
+  </div>  
+</header>
+
+<main>
+<div class="view" data-view="accueil" data-title="AgriFortunat — Académie agricole &amp; diagnostic phyto intelligent">
+<section class="hero" id="top">  
+    <div class="wrap">  
+      <div class="hero-top">  
+        <h1 class="display hero-title">  
+          Cultivez<br>l'excellence,<br><span class="accent under">feuille<svg viewBox="0 0 300 14" preserveAspectRatio="none" aria-hidden="true"><path d="M2 9C60 3 118 12 176 6 224 1 262 8 298 4" stroke="#C2622D" stroke-width="4" fill="none" stroke-linecap="round"/></svg></span> après feuille.  
+        </h1>  
+        <div class="hero-note">  
+          <strong>AgriFortunat — depuis 2019</strong>  
+          De la mise en terre à la moisson : une méthode claire pour les nouveaux exploitants, un assistant qui lit vos plantes, et un suivi qui ne laisse rien au hasard.  
+        </div>  
+      </div>  
+    </div>  <div class="hero-band">  
+<div class="hero-media">  
+  <img src="https://images.pexels.com/photos/36917505/pexels-photo-36917505.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" alt="Rangées de plants de tomates dans une serre moderne">  
+  <div class="hero-badge">AgTech &amp; <b>Intelligence végétale</b></div>  
+</div>  
+  <div class="hero-plate">  
+    <p>Formez-vous aux bases de l'agriculture, suivez chaque étape de la croissance de vos plantes grâce à notre assistant intelligent, et propulsez vos rendements.</p>  
+    <div class="hero-actions">  
+      <a href="#diagnostic" class="btn btn-clay">Lancer le diagnostic IA</a>  
+      <a href="#croissance" class="btn btn-line">Simuler une croissance</a>  
+    </div>  
+  </div>  
+</div>  
+
+<div class="wrap">  
+  <div class="stats">  
+    <div class="stat reveal"><div class="v num">04</div><div class="k">Modules de formation</div></div>  
+    <div class="stat reveal"><div class="v num">06</div><div class="k">Facteurs de croissance</div></div>  
+    <div class="stat reveal"><div class="v num">12</div><div class="k">Cultures couvertes</div></div>  
+    <div class="stat reveal"><div class="v num"><i>≈</i>30<span style="font-size:.55em;letter-spacing:.06em"> s</span></div><div class="k">Par analyse foliaire</div></div>  
+  </div>  
+</div>
+
+  </section>
+<div class="ticker" aria-hidden="true">  
+    <div class="ticker-track" id="tickerTrack">  
+      <div class="ticker-item">Semis <span>✳</span> Irrigation <span>✳</span> Fertilité du sol <span>✳</span> Rotation des cultures <span>✳</span> Analyse foliaire <span>✳</span> Engrais organiques <span>✳</span> Moisson <span>✳</span></div>  
+      <div class="ticker-item">Semis <span>✳</span> Irrigation <span>✳</span> Fertilité du sol <span>✳</span> Rotation des cultures <span>✳</span> Analyse foliaire <span>✳</span> Engrais organiques <span>✳</span> Moisson <span>✳</span></div>  
+    </div>  
+  </div>    
+
+  <section id="parcours">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <span class="num-tag reveal">Le parcours</span>
+          <h2 class="display reveal">Trois étapes,<br>une seule méthode</h2>
         </div>
-    </header>
-
-    <main>
-        <!-- Widget Horloge / Statut -->
-        <div class="glass-card">
-            <div class="card-title">
-                <span>Temps Système</span>
-                <span>UTC+1</span>
-            </div>
-            <div class="holo-value" id="clock-display">00:00:00</div>
-            <div class="holo-subtext" id="date-display">Initialisation calendrier...</div>
+        <p class="lead reveal">Apprenez d'abord, testez ensuite, diagnostiquez enfin. Chaque étape a sa page : avancez dans l'ordre, ou allez droit à ce dont vous avez besoin.</p>
+      </div>
+      <div class="hub">
+        <div class="hub-card reveal">
+          <div class="hn num">01</div>
+          <h3>Académie des débutants</h3>
+          <p>Quatre modules pour maîtriser le cycle complet, de la mise en terre à la moisson.</p>
+          <ul>
+            <li><a href="#cours-sol">Analyse &amp; fertilité du sol <span>45 min</span></a></li>
+            <li><a href="#cours-semis">Calendrier des semis <span>60 min</span></a></li>
+            <li><a href="#cours-entretien">Entretien, eau &amp; engrais <span>60 min</span></a></li>
+            <li><a href="#cours-moisson">Moisson &amp; maturité <span>35 min</span></a></li>
+          </ul>
+          <a href="#academie" class="hub-go">Voir l'Académie <span>&rarr;</span></a>
         </div>
-
-        <!-- Widget Assistant MNLOS AI -->
-        <div class="glass-card">
-            <div class="card-title">
-                <span>Assistant Neuronal</span>
-                <span>Mode Local</span>
-            </div>
-            <div class="assistant-box">
-                <div class="assistant-log" id="assistant-log">
-                    <p class="ai-msg">> MNLOS Core initialisé avec succès.</p>
-                    <p class="ai-msg">> Tapez "aide", "statut" ou posez une question dans la console ci-dessous.</p>
-                </div>
-                <div class="assistant-input-row">
-                    <input type="text" id="user-input" placeholder="Entrer une commande ou un message...">
-                    <button onclick="handleUserCommand()">EXEC</button>
-                </div>
-            </div>
+        <div class="hub-card reveal">
+          <div class="hn num">02</div>
+          <h3>Ce qu'il faut pour qu'elle grandisse</h3>
+          <p>Les six facteurs de croissance avec leurs zones optimales, puis un simulateur : réglez lumière, eau, température et azote, et regardez la plante réagir.</p>
+          <a href="#croissance" class="hub-go">Ouvrir le simulateur <span>&rarr;</span></a>
         </div>
-
-        <!-- Widget Infos Matérielles simulées/réelles -->
-        <div class="glass-card">
-            <div class="card-title">
-                <span>Environnement Matériel</span>
-                <span>Tecno Spark</span>
-            </div>
-            <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">
-                <p>Plateforme : <span style="color: var(--text-main);">Mobile Web Container / PWA</span></p>
-                <p>Niveau de batterie : <span id="battery-status" style="color: var(--accent-cyan);">Analyse...</span></p>
-                <p>Connexion : <span id="network-status" style="color: var(--accent-cyan);">Vérification...</span></p>
-            </div>
+        <div class="hub-card reveal">
+          <div class="hn num">03</div>
+          <h3>Diagnostic IA par photo</h3>
+          <p>Photographiez votre plante ou votre sol : l'assistant identifie l'espèce, estime le stade et propose l'engrais et l'arrosage adaptés.</p>
+          <a href="#diagnostic" class="hub-go">Scanner une plante <span>&rarr;</span></a>
         </div>
-    </main>
+      </div>
+    </div>
+    <div class="hub-gap"></div>
+  </section>
 
-    <nav class="system-dock">
-        <button class="dock-item active" onclick="switchTab('home')">
-            <span>⌂</span>
-            <span>Accueil</span>
-        </button>
-        <button class="dock-item" onclick="switchTab('ai')">
-            <span>✦</span>
-            <span>Assistant</span>
-        </button>
-        <button class="dock-item" onclick="switchTab('modules')">
-            <span>⚙</span>
-            <span>Modules</span>
-        </button>
-    </nav>
+<section class="chef" id="chef">  
+    <div class="chef-grid">  
+      <div class="chef-photos">  
+        <figure class="chef-frame">  
+          <img src="PDG1.png" alt="Chef Fortunat, fondateur d'AgriFortunat — vue 1"  
+               onerror="this.onerror=null;this.src='https://images.pexels.com/photos/33993456/pexels-photo-33993456.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940'">  
+          <figcaption class="cap">Parcelle Nord — 2025</figcaption>  
+        </figure>  
+        <figure class="chef-frame">  
+          <img src="PDG2.png" alt="Chef Fortunat, fondateur d'AgriFortunat — vue 2"  
+               onerror="this.onerror=null;this.src='https://images.pexels.com/photos/2382665/pexels-photo-2382665.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940'">  
+          <figcaption class="cap">Formation terrain — 2026</figcaption>  
+        </figure>  
+      </div>  
+      <div class="chef-quote">  
+        <span class="eyebrow">04 — Le mot du Chef</span>  
+        <h2 class="display" style="font-size:clamp(1.95rem,3.6vw,3rem);margin-top:1.15rem">Mot du Chef Fortunat</h2>  
+        <span class="ital">« La terre ne ment jamais à celui qui la travaille avec <span>rigueur et méthode</span>. Chez AgriFortunat, notre ambition est de marier le savoir-faire agricole traditionnel avec la puissance de l'intelligence artificielle pour garantir l'abondance de nos récoltes. »</span>  
+        <div class="chef-sign">  
+          <div>  
+            <div class="nm">Fortunat</div>  
+            <div class="rl">Fondateur &amp; Directeur Général</div>  
+          </div>  
+          <div class="chef-values">  
+            <span>Rigueur</span><span>Transmission</span><span>Innovation</span>  
+          </div>  
+        </div>  
+      </div>  
+    </div>  
+  </section>
+</div>
 
-    <script>
-        // Horloge temps réel
-        function updateClock() {
-            const now = new Date();
-            document.getElementById('clock-display').innerText = now.toLocaleTimeString();
-            document.getElementById('date-display').innerText = now.toLocaleDateString('fr-FR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
+<div class="view" data-view="academie" data-title="Académie des débutants — AgriFortunat">
+<section id="sec-academie" class="page-pad page-end">  
+    <div class="wrap">  
+      <div class="sec-head">  
+        <div>  
+          <span class="num-tag reveal">01 — Registre de formation</span>  
+          <h2 class="display reveal">Académie des<br>débutants</h2>  
+        </div>  
+        <p class="lead reveal">Maîtrisez le cycle complet des cultures, de la mise en terre à la moisson. Quatre modules courts, conçus comme les pages d'un carnet de parcelle : une notion, une démonstration, un geste à refaire chez vous.</p>  
+      </div>  <div class="reg">  
+    <!-- 01 -->  
+    <article class="row reveal">  
+      <div class="row-head" tabindex="0" role="button" aria-expanded="false">  
+        <div class="row-n num">01</div>  
+        <h3 class="row-t">Analyse &amp; fertilité du sol</h3>  
+        <p class="row-d">Tester la texture, l'humidité et les nutriments essentiels de votre terrain avant de semer.</p>  
+        <div class="row-meta">  
+          <span class="chip">45 min</span>  
+          <span class="chip ok">Niveau débutant</span>  
+          <div class="row-toggle" aria-hidden="true"><svg viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>  
+        </div>  
+      </div>  
+      <div class="row-body"><div><div class="row-inner">  
+        <div></div>  
+        <div class="course-col"><ul>  
+          <li><b>Le test du boudin</b> — reconnaissez un sol limoneux, sableux ou argileux en 3 minutes, sans laboratoire.</li>  
+          <li><b>pH et disponibilité</b> — mesurez l'acidité et comprenez pourquoi un pH à 5,5 bloque le phosphore.</li>  
+          <li><b>Plan d'amendement</b> — calculez l'apport de compost et de chaux selon votre analyse.</li>  
+        </ul><a class="btn btn-clay" href="#cours-sol">Ouvrir le cours complet &rarr;</a></div>  
+        <div class="row-figure"><img loading="lazy" src="https://images.pexels.com/photos/12969371/pexels-photo-12969371.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" alt="Mains tenant une jeune plantule dans la terre"></div>  
+      </div></div></div>  
+    </article>  
 
-        // Analyse batterie & réseau via APIs Web
-        if ('navigator' in navigator && 'getBattery' in navigator) {
-            navigator.getBattery().then(battery => {
-                function updateBattery() {
-                    document.getElementById('battery-status').innerText = `${Math.round(battery.level * 100)}% ${battery.charging ? '(En charge)' : ''}`;
-                }
-                updateBattery();
-                battery.addEventListener('levelchange', updateBattery);
-                battery.addEventListener('chargingchange', updateBattery);
-            });
-        } else {
-            document.getElementById('battery-status').innerText = "Non exposé par le navigateur";
-        }
+    <!-- 02 -->  
+    <article class="row reveal">  
+      <div class="row-head" tabindex="0" role="button" aria-expanded="false">  
+        <div class="row-n num">02</div>  
+        <h3 class="row-t">Calendrier des semis</h3>  
+        <p class="row-d">La période exacte pour mettre les grains en terre selon le climat, la saison et l'espèce.</p>  
+        <div class="row-meta">  
+          <span class="chip">60 min</span>  
+          <span class="chip ok">Niveau débutant</span>  
+          <div class="row-toggle" aria-hidden="true"><svg viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>  
+        </div>  
+      </div>  
+      <div class="row-body"><div><div class="row-inner">  
+        <div></div>  
+        <div class="course-col"><ul>  
+          <li><b>Température du sol</b> — le seuil réel de germination : 10 °C pour la tomate, 4 °C pour la féverole.</li>  
+          <li><b>Jours sans gel</b> — reculez votre date de semis de 6 semaines avant la dernière gelée.</li>  
+          <li><b>Échelonnement</b> — semez toutes les 2 semaines pour récolter sans interruption.</li>  
+        </ul><a class="btn btn-clay" href="#cours-semis">Ouvrir le cours complet &rarr;</a></div>  
+        <div class="row-figure"><img loading="lazy" src="https://images.pexels.com/photos/12288768/pexels-photo-12288768.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" alt="Mains tenant délicatement une jeune plantule"></div>  
+      </div></div></div>  
+    </article>  
 
-        const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-        if (connection) {
-            document.getElementById('network-status').innerText = `${connection.effectiveType.toUpperCase()} (${connection.downlink} Mbps)`;
-        } else {
-            document.getElementById('network-status').innerText = "Actif";
-        }
+    <!-- 03 -->  
+    <article class="row reveal">  
+      <div class="row-head" tabindex="0" role="button" aria-expanded="false">  
+        <div class="row-n num">03</div>  
+        <h3 class="row-t">Entretien, eau &amp; engrais</h3>  
+        <p class="row-d">Identifier les engrais naturels ou organiques parfaits et maîtriser l'arrosage optimal.</p>  
+        <div class="row-meta">  
+          <span class="chip">60 min</span>  
+          <span class="chip ok">Niveau débutant</span>  
+          <div class="row-toggle" aria-hidden="true"><svg viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>  
+        </div>  
+      </div>  
+      <div class="row-body"><div><div class="row-inner">  
+        <div></div>  
+        <div class="course-col"><ul>  
+          <li><b>Paillage</b> — 7 cm de paillis divisent l'évaporation par deux et font économiser 40 % d'eau.</li>  
+          <li><b>N-P-K</b> — lisez un sac d'engrais et adaptez la formule à la phase : végétatif, floraison, fructification.</li>  
+          <li><b>Goutte-à-goutte</b> — arrosez tôt, au pied, en 2 séances longues plutôt que 5 brèves.</li>  
+        </ul><a class="btn btn-clay" href="#cours-entretien">Ouvrir le cours complet &rarr;</a></div>  
+        <div class="row-figure"><img loading="lazy" src="https://images.pexels.com/photos/9512333/pexels-photo-9512333.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" alt="Tomates cultivées en jardin vertical sous serre"></div>  
+      </div></div></div>  
+    </article>  
 
-        // Gestion de l'Assistant Logique
-        function handleUserCommand() {
-            const inputField = document.getElementById('user-input');
-            const logBox = document.getElementById('assistant-log');
-            const text = inputField.value.trim();
-            if (!text) return;
+    <!-- 04 -->  
+    <article class="row reveal">  
+      <div class="row-head" tabindex="0" role="button" aria-expanded="false">  
+        <div class="row-n num">04</div>  
+        <h3 class="row-t">Moisson &amp; maturité</h3>  
+        <p class="row-d">Reconnaître le moment idéal où la plante atteint son plein potentiel pour une récolte de qualité supérieure.</p>  
+        <div class="row-meta">  
+          <span class="chip">35 min</span>  
+          <span class="chip ok">Niveau débutant</span>  
+          <div class="row-toggle" aria-hidden="true"><svg viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>  
+        </div>  
+      </div>  
+      <div class="row-body"><div><div class="row-inner">  
+        <div></div>  
+        <div class="course-col"><ul>  
+          <li><b>Indices de maturité</b> — couleur, fermeté, indice de réfractomètre (Brix) et abscission du pédoncule.</li>  
+          <li><b>Le bon créneau</b> — récoltez le matin, après la rosée, pour une tenue en conservation doublée.</li>  
+          <li><b>Après-récolte</b> — tri, ombrage, respiration : les 4 premières heures décident de la garde.</li>  
+        </ul><a class="btn btn-clay" href="#cours-moisson">Ouvrir le cours complet &rarr;</a></div>  
+        <div class="row-figure"><img loading="lazy" src="https://images.pexels.com/photos/8180574/pexels-photo-8180574.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" alt="Rangées de plants de tomates mûres en serre"></div>  
+      </div></div></div>  
+    </article>  
+  </div>  
+</div>
 
-            // Afficher le message utilisateur
-            logBox.innerHTML += `<p>> ${escapeHtml(text)}</p>`;
-            inputField.value = '';
+  </section>
+<div class="next-step">
+  <div class="wrap">
+    <div><span class="eyebrow">Étape suivante</span><h3>Testez ce que vous venez d'apprendre sur la plante virtuelle.</h3></div>
+    <a href="#croissance" class="btn btn-line">Simuler une croissance</a>
+  </div>
+</div>
+</div>
 
-            // Réponse simulée intelligente
-            setTimeout(() => {
-                let response = "Commande reçue. Module en cours de développement.";
-                const lower = text.toLowerCase();
+<div class="view" data-view="croissance" data-title="Ce qu'il faut pour grandir — AgriFortunat">
+<section id="sec-croissance" class="page-pad">  
+    <div class="wrap">  
+      <div class="sec-head">  
+        <div>  
+          <span class="num-tag reveal">02 — Fiche de culture</span>  
+          <h2 class="display reveal">Qu'est-ce qu'il faut<br>pour qu'elle <span class="ital" style="color:var(--clay)">grandisse</span> ?</h2>  
+        </div>  
+        <p class="lead reveal">Une plante ne « pousse » pas toute seule : elle répond à six facteurs, dont quatre se pilotent au quotidien. Voici leurs zones optimales — puis testez-les vous-même sur la plante ci-dessous.</p>  
+      </div>  <div class="factors">  
+    <div class="factor reveal">  
+      <svg class="fi" viewBox="0 0 40 40" fill="none" aria-hidden="true"><circle cx="20" cy="20" r="8" stroke="currentColor" stroke-width="2"/><path d="M20 3v6M20 31v6M3 20h6M31 20h6M8 8l4 4M28 28l4 4M32 8l-4 4M12 28l-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>  
+      <h4>Lumière</h4>  
+      <p>La photosynthèse demande un minimum d'énergie : sans elle, la plante s'étiole et monte en fleur trop tôt.</p>  
+      <div class="opt"><span>Optimum</span><span class="num">8 – 12 h / jour</span></div>  
+    </div>  
+    <div class="factor reveal">  
+      <svg class="fi" viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M20 4c7 9 11 13.6 11 19a11 11 0 1 1-22 0c0-5.4 4-10 11-19Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M15 25a5.5 5.5 0 0 0 5 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>  
+      <h4>Eau</h4>  
+      <p>Elle transporte les minéraux jusqu'aux feuilles. Excès : asphyxie racinaire. Manque : flétrissement et carence.</p>  
+      <div class="opt"><span>Optimum</span><span class="num">25 – 45 mm / sem.</span></div>  
+    </div>  
+    <div class="factor reveal">  
+      <svg class="fi" viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M6 34h28" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M20 34V14M20 20c0-6-4.6-10-11-10 0 6.4 4.6 10 11 10ZM20 16c0-5 3.8-8.4 9-8.4 0 5.2-3.8 8.4-9 8.4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>  
+      <h4>Azote &amp; minéraux</h4>  
+      <p>L'azote construit le feuille, le phosphore enracine, le potassium charge les fruits. Le déséquilibre se voit en 5 jours.</p>  
+      <div class="opt"><span>Optimum</span><span class="num">60 – 120 kg / ha</span></div>  
+    </div>  
+    <div class="factor reveal">  
+      <svg class="fi" viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M17 24V9a3 3 0 0 1 6 0v15a6.5 6.5 0 1 1-6 0Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M20 17v9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>  
+      <h4>Température</h4>  
+      <p>Chaque stade a sa plage : la germination, la floraison puis le grossissement des fruits n'ont pas les mêmes besoins.</p>  
+      <div class="opt"><span>Optimum</span><span class="num">18 – 28 °C</span></div>  
+    </div>  
+    <div class="factor reveal">  
+      <svg class="fi" viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M4 26h32M4 32h32" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M10 20c2-5 6-8 10-8s8 3 10 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="2.4" stroke="currentColor" stroke-width="2"/><circle cx="28" cy="10" r="2.4" stroke="currentColor" stroke-width="2"/></svg>  
+      <h4>Structure du sol</h4>  
+      <p>Un sol labouré trop fin s'érode et se tasse. Il faut de l'air pour les racines et de la matière organique pour la vie microbienne.</p>  
+      <div class="opt"><span>Optimum</span><span class="num">2 – 4 % matière org.</span></div>  
+    </div>  
+    <div class="factor reveal">  
+      <svg class="fi" viewBox="0 0 40 40" fill="none" aria-hidden="true"><rect x="5" y="5" width="30" height="30" stroke="currentColor" stroke-width="2"/><path d="M15 5v30M25 5v30M5 15h30M5 25h30" stroke="currentColor" stroke-width="1.4" opacity=".55"/></svg>  
+      <h4>Espace &amp; air</h4>  
+      <p>L'espacement décide de la circulation de l'air : trop serré, l'oïdium et la botrytis s'installent en une nuit humide.</p>  
+      <div class="opt"><span>Optimum</span><span class="num">45 – 60 cm / plant</span></div>  
+    </div>  
+  </div>  
+</div>  
 
-                if (lower.includes('aide') || lower.includes('help')) {
-                    response = "Commandes disponibles : 'statut', 'bonjour', 'nettoyer', 'heure', 'auteur'.";
-                } else if (lower.includes('statut') || lower.includes('status')) {
-                    response = "Système MNLOS opérationnel. Intégrité visuelle 100%. Aucun service cloud tiers requis.";
-                } else if (lower.includes('bonjour') || lower.includes('salut')) {
-                    response = "Salutations, Fondateur. MNLOS est à votre écoute.";
-                } else if (lower.includes('heure')) {
-                    response = `Il est actuellement ${new Date().toLocaleTimeString()}.`;
-                } else if (lower.includes('auteur') || lower.includes('createur')) {
-                    response = "Projet MNLOS conçu et piloté par MANASSE NTAMBWA LUSHIKU.";
-                }
+<!-- SIMULATEUR -->  
+<div class="sim">  
+  <div class="sim-grid">  
+    <div>  
+      <div class="plant-stage">  
+        <svg class="plant" id="plantSvg" viewBox="0 0 320 420" role="img" aria-label="Représentation dessinée d'une plante dont la croissance dépend des curseurs">  
+          <!-- soleil -->  
+          <circle cx="58" cy="58" r="21" fill="#C2622D" opacity=".55" id="sun"/>  
+          <g stroke="#C2622D" stroke-width="2.2" stroke-linecap="round" opacity=".42" id="sunRays">  
+            <path d="M58 22v-11M58 105v11M22 58H11M94 58h11M32 32l-8-8M84 84l8 8M84 32l8-8M32 84l-8 8"/>  
+          </g>  
+          <!-- gouttes -->  
+          <g class="drop"><rect x="236" y="70" width="7" height="13" rx="3.5"/></g>  
+          <g class="drop"><rect x="264" y="62" width="7" height="13" rx="3.5"/></g>  
+          <g class="drop"><rect x="250" y="86" width="7" height="13" rx="3.5"/></g>  
+          <!-- sol -->  
+          <rect x="20" y="300" width="280" height="100" fill="#22422C"/>  
+          <path d="M20 300h280" stroke="#7FBF7A" stroke-width="2.4"/>  
+          <!-- racines -->  
+          <g class="root" stroke-width="3.2" stroke-linecap="round" fill="none">  
+            <path d="M160 302c-4 18-16 26-26 34"/>  
+            <path d="M160 302c2 20 12 30 22 40"/>  
+            <path d="M160 302c-1 26 1 40 2 56"/>  
+            <path d="M160 316c-10 8-18 12-28 14"/>  
+          </g>  
+          <!-- tige -->  
+          <path class="stem" d="M160 302c-5-52-2-96 1-140" stroke="var(--stem)" stroke-width="9" stroke-linecap="round" fill="none"/>  
+          <!-- feuilles -->  
+          <g transform="translate(158,252) rotate(-22)"><g class="leafwrap">  
+            <path class="leaf" d="M0 0C22-26 60-30 82-6 60 18 22 20 0 0Z"/>  
+            <path d="M2 0h72" stroke="#22422C" stroke-width="1.6" opacity=".38"/>  
+          </g></g>  
+          <g transform="translate(162,232) rotate(22)"><g class="leafwrap mirror">  
+            <path class="leaf" d="M0 0C22-26 60-30 82-6 60 18 22 20 0 0Z"/>  
+            <path d="M2 0h72" stroke="#22422C" stroke-width="1.6" opacity=".38"/>  
+          </g></g>  
+          <g transform="translate(158,204) rotate(-30)"><g class="leafwrap">  
+            <path class="leaf" d="M0 0C18-22 50-25 68-5 50 15 18 17 0 0Z"/>  
+            <path d="M2 0h60" stroke="#22422C" stroke-width="1.6" opacity=".38"/>  
+          </g></g>  
+          <g transform="translate(161,182) rotate(30)"><g class="leafwrap mirror">  
+            <path class="leaf" d="M0 0C18-22 50-25 68-5 50 15 18 17 0 0Z"/>  
+            <path d="M2 0h60" stroke="#22422C" stroke-width="1.6" opacity=".38"/>  
+          </g></g>  
+          <g transform="translate(159,156) rotate(-42)"><g class="leafwrap">  
+            <path class="leaf" d="M0 0C14-17 38-20 52-4 38 12 14 13 0 0Z"/>  
+          </g></g>  
+          <!-- apex -->  
+          <path class="stem" d="M161 162c-1-10 1-18 3-24" stroke="var(--stem)" stroke-width="6" stroke-linecap="round" fill="none" style="transform-box:view-box;transform-origin:161px 162px;transform:scaleY(var(--grow))"/>  
+        </svg>  
 
-                logBox.innerHTML += `<p class="ai-msg">> ${response}</p>`;
-                logBox.scrollTop = logBox.scrollHeight;
-            }, 300);
+        <div class="sim-readouts">  
+          <div class="readout">  
+            <div class="k">Indice de vigueur</div>  
+            <div class="v"><span class="num" id="idxVigueur">62</span><small> / 100</small></div>  
+            <div class="gauge"><i id="gVigueur" style="width:62%"></i></div>  
+          </div>  
+          <div class="readout">  
+            <div class="k">Croissance estimée</div>  
+            <div class="v"><span class="num" id="idxCroissance">+2,4</span> <small>cm / semaine</small></div>  
+          </div>  
+          <div class="readout">  
+            <div class="k">Rendement projeté</div>  
+            <div class="v"><span class="num" id="idxRendement">5,1</span> <small>kg / plant</small></div>  
+          </div>  
+          <div class="readout" style="border-bottom:none">  
+            <div class="k">Récolte dans</div>  
+            <div class="v"><span class="num" id="idxRecolte">78</span> <small>jours</small></div>  
+          </div>  
+        </div>  
+      </div>  
+    </div>  
 
-            logBox.scrollTop = logBox.scrollHeight;
-        }
+    <div>  
+      <span class="eyebrow">Simulateur de croissance</span>  
+      <h3>Réglez les conditions,<br>regardez-la grandir.</h3>  
+      <p class="lead">Chaque curseur agit directement sur la plante dessinée. L'indice de vigueur combine les quatre facteurs et vous indique le geste à corriger en priorité.</p>  
 
-        function escapeHtml(string) {
-            return string.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        }
+      <div class="sliders">  
+        <div class="slider-row">  
+          <div class="top"><label class="lbl" for="sLum">Lumière — exposition</label><span class="val num" id="vLum">10 h / jour</span></div>  
+          <input type="range" id="sLum" min="0" max="16" step="1" value="10" aria-describedby="vLum">  
+        </div>  
+        <div class="slider-row">  
+          <div class="top"><label class="lbl" for="sEau">Eau — irrigation</label><span class="val num" id="vEau">35 mm / sem.</span></div>  
+          <input type="range" id="sEau" min="0" max="80" step="1" value="35" aria-describedby="vEau">  
+        </div>  
+        <div class="slider-row">  
+          <div class="top"><label class="lbl" for="sTemp">Température — serre</label><span class="val num" id="vTemp">23 °C</span></div>  
+          <input type="range" id="sTemp" min="4" max="42" step="1" value="23" aria-describedby="vTemp">  
+        </div>  
+        <div class="slider-row">  
+          <div class="top"><label class="lbl" for="sAzote">Azote — fertilisation</label><span class="val num" id="vAzote">90 kg / ha</span></div>  
+          <input type="range" id="sAzote" min="0" max="220" step="5" value="90" aria-describedby="vAzote">  
+        </div>  
+      </div>  
 
-        // Permettre la validation par touche Entrée
-        document.getElementById('user-input').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                handleUserCommand();
-            }
-        });
+      <div class="presets" role="group" aria-label="Scénarios prédéfinis">  
+        <button class="preset on" data-preset="optimal">Conditions optimales</button>  
+        <button class="preset" data-preset="secheresse">Sécheresse</button>  
+        <button class="preset" data-preset="canicule">Canicule</button>  
+        <button class="preset" data-preset="carence">Carence en azote</button>  
+      </div>  
 
-        function switchTab(tab) {
-            document.querySelectorAll('.dock-item').forEach(el => el.classList.remove('active'));
-            event.currentTarget.classList.add('active');
-        }
-    </script>
-</body>
-</html>
+      <div class="verdict" id="verdict" aria-live="polite">  
+        <b id="verdictTitle">Conditions équilibrées</b>  
+        <span id="verdictText">La plante dispose de tout ce qu'il lui faut : maintenez l'humidité régulière et surveillez la floraison.</span>  
+      </div>  
+    </div>  
+  </div>  
+</div>
+
+  </section>
+<div class="next-step">
+  <div class="wrap">
+    <div><span class="eyebrow">Étape suivante</span><h3>Passez de la théorie à votre propre culture.</h3></div>
+    <a href="#diagnostic" class="btn btn-line">Lancer le diagnostic IA</a>
+  </div>
+</div>
+</div>
+
+<div class="view" data-view="diagnostic" data-title="Diagnostic IA par photo — AgriFortunat">
+<section id="sec-diagnostic" class="page-pad">  
+    <div class="wrap">  
+      <div class="sec-head">  
+        <div>  
+          <span class="num-tag reveal">03 — Assistant phytosanitaire</span>  
+          <h2 class="display reveal">Photographiez.<br>L'IA lit la plante.</h2>  
+        </div>  
+        <p class="lead reveal">Prenez une photo de votre plante ou de votre sol : l'assistant identifie l'espèce, estime le stade, repère les symptômes et prescrit l'engrais et l'arrosage adaptés — en français, en quelques secondes.</p>  
+      </div>  <div class="diag">  
+    <div>  
+      <div class="drop" id="drop" tabindex="0" role="button" aria-label="Importer une photo de plante">  
+        <svg class="cam" viewBox="0 0 48 48" fill="none" aria-hidden="true">  
+          <path d="M4 15h9l3.4-5h15.2L35 15h9v25H4V15Z" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>  
+          <circle cx="24" cy="27" r="8.2" stroke="currentColor" stroke-width="2.2"/>  
+          <path d="M24 21.4c2.6 1.6 3.2 4 2 6.6" stroke="#C2622D" stroke-width="2.2" stroke-linecap="round"/>  
+        </svg>  
+        <h3>Importer une photo</h3>  
+        <p>Glissez-déposez une image ici, ou cliquez pour parcourir vos fichiers.<br>JPG, PNG ou HEIC — 10 Mo maximum.</p>  
+        <span class="btn btn-clay">Sélectionner l'image</span>  
+        <input type="file" id="plantFile" accept="image/*" style="display:none">  
+      </div>  
+
+      <div class="preview" id="preview">  
+        <img id="previewImg" alt="Aperçu de la photo sélectionnée">  
+        <div class="tag" id="previewTag">Aperçu — prêt pour analyse</div>  
+      </div>  
+
+      <div class="log" id="log">  
+        <div style="animation-delay:.05s">En attente d'une image…</div>  
+      </div>  
+    </div>  
+
+    <div class="report">  
+      <div class="report-head">  
+        <h3><span class="pulse"></span> Rapport d'analyse IA</h3>  
+        <div class="rid num" id="reportId">Réf. AF-2026-0000</div>  
+      </div>  
+      <div class="report-body">  
+        <div class="rline"><span class="k">Espèce détectée</span><span class="v" id="resEspece">En attente de photo…</span></div>  
+        <div class="rline"><span class="k">Âge / stade</span><span class="v" id="resAge">—</span></div>  
+        <div class="rline"><span class="k">Engrais recommandé</span><span class="v" id="resEngrais">—</span></div>  
+        <div class="rline"><span class="k">Arrosage</span><span class="v" id="resArrosage">—</span></div>  
+        <div class="rline" style="border-bottom:none"><span class="k">Exposition</span><span class="v" id="resExposition">—</span></div>  
+
+        <div class="ring-wrap">  
+          <div class="ring">  
+            <svg width="118" height="118" viewBox="0 0 118 118" aria-hidden="true">  
+              <circle cx="59" cy="59" r="50" fill="none" stroke="#D9CDB4" stroke-width="9"/>  
+              <circle id="ringArc" cx="59" cy="59" r="50" fill="none" stroke="#C2622D" stroke-width="9" stroke-linecap="round" stroke-dasharray="314" stroke-dashoffset="314" style="transition:stroke-dashoffset .9s cubic-bezier(.16,1,.3,1)"/>  
+            </svg>  
+            <div class="rv num" id="ringVal">0%</div>  
+          </div>  
+          <div class="ring-cap">  
+            <div class="k">Progression vers la maturité</div>  
+            <h4 id="ringTitle">Aucune analyse effectuée</h4>  
+            <p id="ringDesc">Chargez une photo pour obtenir une estimation du stade phénologique et un calendrier de récolte personnalisé.</p>  
+          </div>  
+        </div>  
+
+        <div class="care">  
+          <div><div class="k">Prochain arrosage</div><div class="v num" id="careEau">—</div></div>  
+          <div><div class="k">Prochain apport</div><div class="v num" id="careEngrais">—</div></div>  
+          <div><div class="k">Récolte estimée</div><div class="v num" id="careRecolte">—</div></div>  
+        </div>  
+
+        <div class="report-actions">  
+          <button class="btn btn-ghost" id="btnRescan">Analyser une autre photo</button>  
+          <span class="mini">Modèle vision Groq</span>  
+          <span class="mini">Réponses en français</span>  
+        </div>  
+      </div>  
+    </div>  
+  </div>  
+</div>
+
+  </section>
+<div class="next-step">
+  <div class="wrap">
+    <div><span class="eyebrow">Pour aller plus loin</span><h3>Comprendre le diagnostic, c'est savoir lire son sol et son eau.</h3></div>
+    <a href="#academie" class="btn btn-line">Retour à l'Académie</a>
+  </div>
+</div>
+</div>
+
+<div class="view" data-view="cours-sol" data-title="Module 01 : Analyse &amp; fertilité du sol — AgriFortunat">
+
+  <section class="page-pad">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <span class="num-tag">Module 01 — 45 min · Niveau débutant</span>
+          <h2 class="display">Analyse &amp; fertilité du sol</h2>
+        </div>
+        <p class="lead">Avant de semer, apprenez à lire votre terrain : sa texture, son acidité et sa réserve de matière organique. Trois mesures simples, faisables sans laboratoire, qui évitent la plupart des échecs de culture.</p>
+      </div>
+      <div class="course">
+        <aside class="toc" aria-label="Sommaire du cours"><div class="toc-title">Dans ce cours</div><a href="#" data-goto="cours-sol-l1"><b>01</b><span>Lire la texture de votre sol</span></a><a href="#" data-goto="cours-sol-l2"><b>02</b><span>pH : l'acidité qui commande les nutriments</span></a><a href="#" data-goto="cours-sol-l3"><b>03</b><span>Matière organique et vie du sol</span></a><a href="#" data-goto="cours-sol-l4"><b>04</b><span>Construire votre plan d'amendement</span></a><a href="#" data-goto="cours-sol-todo"><b>→</b><span>À refaire chez vous</span></a><a href="#" data-goto="cours-sol-quiz"><b>?</b><span>Quiz de validation</span></a></aside>
+        <div>
+
+      <article class="lesson" id="cours-sol-l1">
+        <div class="lesson-head"><span class="lesson-n num">01</span><h3>Lire la texture de votre sol</h3></div>
+        <p>La texture, c'est la proportion de sable, de limon et d'argile. Elle décide de la vitesse d'infiltration de l'eau, de la quantité d'engrais retenue et de la date à laquelle le sol se réchauffe. Deux tests suffisent.</p>
+<h4>Le test du boudin (3 minutes)</h4>
+<ul>
+<li>Prélevez une poignée de terre à 10–15 cm de profondeur et humidifiez-la jusqu'à ce qu'elle soit malléable comme de la pâte à modeler.</li>
+<li><b>Elle ne tient pas</b> et s'effrite : sol sableux.</li>
+<li><b>Elle forme un boudin court et fragile</b>, au toucher soyeux ou farineux : sol limoneux.</li>
+<li><b>Elle forme un boudin lisse et brillant</b> que l'on peut plier en anneau sans le casser : sol argileux.</li>
+</ul>
+<h4>Le test du bocal (confirmation)</h4>
+<p>Remplissez un bocal au tiers de terre tamisée, ajoutez de l'eau et une pincée de sel, secouez fort puis laissez reposer. Le sable se dépose en une minute, le limon en quelques heures, l'argile en un à deux jours. L'épaisseur relative de chaque couche donne votre composition approximative.</p>
+<div class="tbl-wrap"><table class="tbl">
+<tr><th>Texture</th><th>Comportement de l'eau</th><th>Réserve d'éléments</th><th>Conduite à tenir</th></tr>
+<tr><td>Sableux</td><td>Draine et sèche vite</td><td>Faible, éléments lessivés</td><td>Apports fréquents et légers, compost, paillage</td></tr>
+<tr><td>Limoneux</td><td>Bon équilibre</td><td>Bonne</td><td>Surveiller le tassement et la croûte de battance</td></tr>
+<tr><td>Argileux</td><td>Retient l'eau, s'engorge</td><td>Élevée</td><td>Ne jamais travailler détrempé ; matière organique, planches surélevées</td></tr>
+</table></div>
+        
+      </article>
+      <article class="lesson" id="cours-sol-l2">
+        <div class="lesson-head"><span class="lesson-n num">02</span><h3>pH : l'acidité qui commande les nutriments</h3></div>
+        <p>Le pH mesure l'acidité du sol sur une échelle de 0 à 14. La plupart des cultures maraîchères préfèrent un pH compris entre 6 et 7. Hors de cette zone, les éléments sont présents mais la plante ne peut plus les absorber.</p>
+<ul>
+<li><b>pH inférieur à 5,5</b> — le phosphore se fixe sur le fer et l'aluminium, le calcium et le magnésium manquent. Situation fréquente sur les sols ferralitiques des régions tropicales humides.</li>
+<li><b>pH de 6 à 7</b> — disponibilité maximale de la plupart des éléments.</li>
+<li><b>pH supérieur à 7,5</b> — le fer, le zinc et le manganèse deviennent peu disponibles : jeunes feuilles jaunes entre les nervures.</li>
+</ul>
+<h4>Comment mesurer</h4>
+<p>Prélevez en 8 à 10 points de la parcelle, entre 0 et 20 cm de profondeur, mélangez le tout dans un seau propre, puis mesurez avec des bandelettes, un kit colorimétrique ou un pH-mètre. Utilisez de l'eau distillée ou de l'eau de pluie : une eau calcaire fausse la lecture.</p>
+        <div class="callout"><b>Règle d'or</b>Un seul prélèvement ne dit rien : un sol varie d'un coin à l'autre. Mélangez toujours plusieurs points avant de mesurer.</div>
+      </article>
+      <article class="lesson" id="cours-sol-l3">
+        <div class="lesson-head"><span class="lesson-n num">03</span><h3>Matière organique et vie du sol</h3></div>
+        <p>La matière organique est la réserve de fertilité du sol : elle retient l'eau, nourrit les micro-organismes et libère lentement l'azote. Visez 2 à 4 % en sol cultivé. Sous climat chaud, elle se consomme vite : il faut en apporter à chaque saison.</p>
+<ul>
+<li><b>Compost mûr</b> — brun foncé, odeur de sous-bois, plus aucun déchet reconnaissable. Comptez 3 à 5 kg par m² et par an en maraîchage.</li>
+<li><b>Fumier ou fientes</b> — compostés ou laissés vieillir ; frais, ils brûlent les racines.</li>
+<li><b>Engrais verts</b> — mucuna, niébé, crotalaire : ils couvrent le sol, étouffent les adventices, et les légumineuses fixent l'azote de l'air. Fauchez au début de la floraison et laissez décomposer 2 à 3 semaines avant de semer.</li>
+<li><b>Jamais de sol nu</b> — soleil et pluies battantes détruisent la structure en quelques semaines.</li>
+</ul>
+        
+      </article>
+      <article class="lesson" id="cours-sol-l4">
+        <div class="lesson-head"><span class="lesson-n num">04</span><h3>Construire votre plan d'amendement</h3></div>
+        <p>Un plan d'amendement relie ce que vous avez mesuré à ce que vous allez apporter. Faites-le 3 à 4 semaines avant le semis.</p>
+<ul>
+<li><b>Notez</b> la texture, le pH, les signes de compactage, la couleur du sol et la présence de vers de terre.</li>
+<li><b>Priorisez</b> — corrigez d'abord le pH (s'il est inférieur à 5,5), ensuite la matière organique, et seulement en dernier les engrais.</li>
+<li><b>Chaulez avec prudence</b> — comme ordre de grandeur pour un jardin : 100 à 200 g/m² de chaux ou de dolomie en deux apports espacés, puis nouvelle mesure après trois mois. Pas de chaux en même temps qu'un fumier frais, et jamais sans mesure préalable.</li>
+<li><b>Incorporez</b> le compost sur les 10 premiers centimètres, sans retourner profondément ; décompactez à la fourche-bêche si le sol est dur.</li>
+<li><b>N'intervenez pas sur sol détrempé</b> : on fabrique des mottes qui durcissent. Si la terre colle aux bottes, attendez.</li>
+</ul>
+        <div class="callout"><b>Un doute ?</b>Pour de grandes surfaces ou des cultures de rente, faites une analyse en laboratoire : elle donne le pH, la matière organique, P, K, Ca, Mg et la dose de chaux exacte.</div>
+      </article>
+          <div class="todo" id="cours-sol-todo">
+            <div class="todo-head">À refaire chez vous</div>
+            <ul><li><label><input type="checkbox"><span>Faire le test du boudin à trois endroits différents de votre parcelle.</span></label></li><li><label><input type="checkbox"><span>Prélever un échantillon moyen (8 à 10 points) et mesurer son pH.</span></label></li><li><label><input type="checkbox"><span>Ouvrir un carnet de parcelle : date, texture, pH, observations.</span></label></li><li><label><input type="checkbox"><span>Programmer un apport de compost 3 à 4 semaines avant votre prochain semis.</span></label></li></ul>
+          </div>
+          <div class="quiz" id="cours-sol-quiz">
+            <div class="quiz-head"><h3>Quiz de validation</h3><span class="quiz-score">Score <b class="quiz-score-val">0 / 3</b></span></div>
+            <div class="q" data-correct="2"><p class="qt">Votre boudin de terre se plie en anneau lisse et brillant sans se casser. Quel est votre sol ?</p><button type="button" class="opt-btn">Sableux</button><button type="button" class="opt-btn">Limoneux</button><button type="button" class="opt-btn">Argileux</button><p class="why">Un boudin lisse et brillant qui se plie en anneau est la signature d'un sol argileux : il retient l'eau et ne se travaille pas détrempé.</p></div><div class="q" data-correct="1"><p class="qt">Pourquoi mélange-t-on plusieurs prélèvements avant de mesurer le pH ?</p><button type="button" class="opt-btn">Pour réchauffer l'échantillon</button><button type="button" class="opt-btn">Parce que le sol varie d'un point à l'autre</button><button type="button" class="opt-btn">Pour faire monter le pH</button><p class="why">Un seul point n'est pas représentatif : le mélange de 8 à 10 prélèvements donne une valeur moyenne fiable.</p></div><div class="q" data-correct="1"><p class="qt">Sur un sol très acide (pH 5), que faut-il corriger en premier ?</p><button type="button" class="opt-btn">Ajouter un engrais azoté</button><button type="button" class="opt-btn">Corriger l'acidité (chaulage progressif)</button><button type="button" class="opt-btn">Arroser plus souvent</button><p class="why">Tant que le pH est trop bas, le phosphore est bloqué : un engrais en plus serait en grande partie perdu.</p></div>
+            <div class="quiz-result" aria-live="polite"></div>
+          </div>
+          <div class="course-nav"><a class="btn btn-ghost" href="#academie">&larr; Toute l'Académie</a><a class="btn btn-clay" href="#cours-semis">Calendrier des semis &rarr;</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="view" data-view="cours-semis" data-title="Module 02 : Calendrier des semis — AgriFortunat">
+
+  <section class="page-pad">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <span class="num-tag">Module 02 — 60 min · Niveau débutant</span>
+          <h2 class="display">Calendrier des semis</h2>
+        </div>
+        <p class="lead">Semer au bon moment, c'est gagner des semaines et éviter les pertes. Ce module vous apprend à lire les vrais signaux (température du sol, gel, pluies), à choisir entre semis direct et pépinière, puis à échelonner vos cultures.</p>
+      </div>
+      <div class="course">
+        <aside class="toc" aria-label="Sommaire du cours"><div class="toc-title">Dans ce cours</div><a href="#" data-goto="cours-semis-l1"><b>01</b><span>Le vrai signal : la température du sol</span></a><a href="#" data-goto="cours-semis-l2"><b>02</b><span>Lire sa saison : gelées et pluies</span></a><a href="#" data-goto="cours-semis-l3"><b>03</b><span>Semis direct ou pépinière ?</span></a><a href="#" data-goto="cours-semis-l4"><b>04</b><span>Échelonner et faire tourner</span></a><a href="#" data-goto="cours-semis-todo"><b>→</b><span>À refaire chez vous</span></a><a href="#" data-goto="cours-semis-quiz"><b>?</b><span>Quiz de validation</span></a></aside>
+        <div>
+
+      <article class="lesson" id="cours-semis-l1">
+        <div class="lesson-head"><span class="lesson-n num">01</span><h3>Le vrai signal : la température du sol</h3></div>
+        <p>Une graine germe quand le sol atteint sa température minimale, pas quand le calendrier l'indique. Un thermomètre enfoncé à 5 cm, lu à 9 h pendant trois jours de suite, vaut mieux que n'importe quelle date.</p>
+<div class="tbl-wrap"><table class="tbl">
+<tr><th>Culture</th><th>Minimum de germination</th><th>Zone la plus favorable</th></tr>
+<tr><td>Féverole, pois</td><td>4 °C</td><td>10 – 20 °C</td></tr>
+<tr><td>Laitue</td><td>4 °C</td><td>15 – 20 °C (au-delà de 28 °C, la germination se bloque)</td></tr>
+<tr><td>Carotte</td><td>7 °C</td><td>15 – 25 °C</td></tr>
+<tr><td>Tomate</td><td>10 °C</td><td>20 – 30 °C</td></tr>
+<tr><td>Maïs</td><td>10 °C</td><td>20 – 30 °C</td></tr>
+<tr><td>Haricot</td><td>12 °C</td><td>20 – 30 °C</td></tr>
+<tr><td>Piment, aubergine</td><td>15 °C</td><td>25 – 30 °C</td></tr>
+</table></div>
+<p class="tbl-note">Valeurs courantes : elles varient légèrement selon les variétés.</p>
+        
+      </article>
+      <article class="lesson" id="cours-semis-l2">
+        <div class="lesson-head"><span class="lesson-n num">02</span><h3>Lire sa saison : gelées et pluies</h3></div>
+        <h4>Climat à hiver froid</h4>
+<p>Repérez la date moyenne de la dernière gelée. Les plants sensibles (tomate, poivron, courge) se sèment au chaud, en pépinière, environ 6 semaines avant cette date, et ne sortent qu'une fois le risque de gel passé.</p>
+<h4>Climat tropical</h4>
+<p>Il n'y a pas de gel : le repère devient la saison des pluies. Ne semez pas sur la première pluie. Un « faux départ » suivi d'une pause sèche fait mourir les levées. Attendez que plusieurs pluies se soient succédé et que le sol soit humide sur 15 à 20 cm : vérifiez à la main en creusant. Dans les régions à deux saisons des pluies, chaque saison a son cycle de cultures ; demandez les dates habituelles aux producteurs voisins ou au service agricole de votre zone.</p>
+        <div class="callout"><b>Votre propre calendrier</b>Notez chaque année vos dates de semis, de levée et de récolte. Au bout de trois saisons, vous aurez un calendrier local plus fiable que n'importe quelle table.</div>
+      </article>
+      <article class="lesson" id="cours-semis-l3">
+        <div class="lesson-head"><span class="lesson-n num">03</span><h3>Semis direct ou pépinière ?</h3></div>
+        <ul>
+<li><b>Semis direct</b> pour les racines et les grosses graines : carotte, radis, haricot, maïs, courge.</li>
+<li><b>Pépinière</b> pour les graines fines ou lentes et les plants fragiles : tomate, piment, aubergine, chou, oignon.</li>
+<li><b>Profondeur</b> — environ 2 à 3 fois le diamètre de la graine. Tomate : 0,5 à 1 cm ; haricot et maïs : 3 à 5 cm.</li>
+<li><b>Repiquage</b> — 4 à 6 semaines après le semis pour la tomate, quand le plant est trapu avec 4 à 6 vraies feuilles. Endurcissez-le pendant 7 jours en l'exposant progressivement au plein air.</li>
+<li><b>Espacement</b> — 45 à 60 cm entre plants de tomate pour que l'air circule et que les maladies s'installent moins.</li>
+</ul>
+<h4>Le test de germination</h4>
+<p>Avant de semer un lot de graines, posez-en 10 entre deux papiers humides, à 20–25 °C, et comptez les levées après 7 à 10 jours. Huit sur dix ou plus : lot correct. Moins de six : changez de lot ou semez beaucoup plus dense.</p>
+        
+      </article>
+      <article class="lesson" id="cours-semis-l4">
+        <div class="lesson-head"><span class="lesson-n num">04</span><h3>Échelonner et faire tourner</h3></div>
+        <p>Tout semer le même jour, c'est tout récolter le même jour. Pour les cultures rapides (radis, laitue, haricot nain, épinard), semez toutes les 2 semaines : la récolte reste continue.</p>
+<p>Ne replantez pas la même famille au même endroit deux ans de suite : maladies et ravageurs spécifiques s'accumulent dans le sol. Faites tourner vos parcelles sur 3 à 4 ans.</p>
+<ul>
+<li><b>Solanacées</b> — tomate, piment, aubergine, pomme de terre.</li>
+<li><b>Cucurbitacées</b> — courge, concombre, pastèque.</li>
+<li><b>Légumineuses</b> — haricot, niébé, arachide. Elles enrichissent le sol en azote pour la culture suivante.</li>
+<li><b>Feuilles et racines</b> — chou, laitue, carotte, oignon.</li>
+</ul>
+        
+      </article>
+          <div class="todo" id="cours-semis-todo">
+            <div class="todo-head">À refaire chez vous</div>
+            <ul><li><label><input type="checkbox"><span>Planter un thermomètre à 5 cm et noter la température à 9 h pendant 3 jours.</span></label></li><li><label><input type="checkbox"><span>Faire un test de germination (10 graines, papier humide) avant d'acheter en gros.</span></label></li><li><label><input type="checkbox"><span>Écrire la liste de vos parcelles avec la famille cultivée cette saison.</span></label></li><li><label><input type="checkbox"><span>Planifier deux semis échelonnés à 2 semaines d'intervalle pour une culture rapide.</span></label></li></ul>
+          </div>
+          <div class="quiz" id="cours-semis-quiz">
+            <div class="quiz-head"><h3>Quiz de validation</h3><span class="quiz-score">Score <b class="quiz-score-val">0 / 3</b></span></div>
+            <div class="q" data-correct="1"><p class="qt">Quel repère déclenche réellement la germination d'une graine ?</p><button type="button" class="opt-btn">La date du calendrier</button><button type="button" class="opt-btn">La température (et l'humidité) du sol</button><button type="button" class="opt-btn">La phase de la lune</button><p class="why">La graine réagit à la chaleur et à l'eau du sol, pas à la date. Mesurez la température à 5 cm.</p></div><div class="q" data-correct="1"><p class="qt">Dans une région sans gel, quel signal indique le bon moment pour semer ?</p><button type="button" class="opt-btn">La toute première pluie</button><button type="button" class="opt-btn">Plusieurs pluies successives et un sol humide sur 15 à 20 cm</button><button type="button" class="opt-btn">Le jour le plus chaud de l'année</button><p class="why">La première pluie peut être un faux départ : attendez que les pluies se répètent et que l'humidité soit installée en profondeur.</p></div><div class="q" data-correct="1"><p class="qt">Votre test de germination donne 4 graines sur 10. Que faites-vous ?</p><button type="button" class="opt-btn">Vous semez comme prévu</button><button type="button" class="opt-btn">Vous changez de lot ou semez beaucoup plus dense</button><button type="button" class="opt-btn">Vous semez plus profond</button><p class="why">Un taux de 40 % est trop faible : le lot est mauvais ou mal conservé.</p></div>
+            <div class="quiz-result" aria-live="polite"></div>
+          </div>
+          <div class="course-nav"><a class="btn btn-ghost" href="#cours-sol">&larr; Analyse du sol</a><a class="btn btn-clay" href="#cours-entretien">Entretien & engrais &rarr;</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="view" data-view="cours-entretien" data-title="Module 03 : Entretien, eau &amp; engrais — AgriFortunat">
+
+  <section class="page-pad">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <span class="num-tag">Module 03 — 60 min · Niveau débutant</span>
+          <h2 class="display">Entretien, eau &amp; engrais</h2>
+        </div>
+        <p class="lead">Une fois la culture installée, trois leviers font la différence : l'eau bien donnée, le sol couvert et la fertilisation adaptée à chaque phase. Ce module vous donne les gestes et les repères chiffrés.</p>
+      </div>
+      <div class="course">
+        <aside class="toc" aria-label="Sommaire du cours"><div class="toc-title">Dans ce cours</div><a href="#" data-goto="cours-entretien-l1"><b>01</b><span>L'eau : combien et comment</span></a><a href="#" data-goto="cours-entretien-l2"><b>02</b><span>Le paillage</span></a><a href="#" data-goto="cours-entretien-l3"><b>03</b><span>Lire un sac d'engrais : N-P-K</span></a><a href="#" data-goto="cours-entretien-l4"><b>04</b><span>Les engrais organiques à connaître</span></a><a href="#" data-goto="cours-entretien-l5"><b>05</b><span>Le rendez-vous hebdomadaire</span></a><a href="#" data-goto="cours-entretien-todo"><b>→</b><span>À refaire chez vous</span></a><a href="#" data-goto="cours-entretien-quiz"><b>?</b><span>Quiz de validation</span></a></aside>
+        <div>
+
+      <article class="lesson" id="cours-entretien-l1">
+        <div class="lesson-head"><span class="lesson-n num">01</span><h3>L'eau : combien et comment</h3></div>
+        <p>Un millimètre d'eau équivaut à 1 litre par mètre carré. Une tomate en pleine croissance demande en général 25 à 45 mm par semaine, pluie comprise ; davantage par forte chaleur et en sol sableux.</p>
+<ul>
+<li><b>Arrosez au pied et tôt le matin</b> — l'eau va aux racines, le feuillage reste sec (moins de mildiou) et l'évaporation est minimale.</li>
+<li><b>Peu de séances, longues</b> — 2 arrosages abondants par semaine font descendre l'eau et poussent les racines en profondeur ; 5 arrosages brefs ne mouillent que la surface.</li>
+<li><b>Le test du doigt</b> — enfoncez le doigt à 5 cm. Sec : arrosez. Frais : attendez.</li>
+<li><b>Périodes critiques</b> — reprise après repiquage, floraison, grossissement des fruits. Un manque d'eau suivi d'un arrosage massif fait éclater les fruits.</li>
+<li><b>Goutte-à-goutte</b> — économise l'eau et dose précisément : un goutteur de 2 L/h fonctionnant 1 heure apporte 2 litres à chaque plant.</li>
+</ul>
+        <div class="callout"><b>Trop d'eau aussi</b>Feuilles basses jaunes et sol détrempé : c'est l'asphyxie des racines, pas un manque. Espacez les arrosages et vérifiez le drainage.</div>
+      </article>
+      <article class="lesson" id="cours-entretien-l2">
+        <div class="lesson-head"><span class="lesson-n num">02</span><h3>Le paillage</h3></div>
+        <p>Couvrir le sol de 5 à 7 cm de matière organique sèche réduit l'évaporation, freine les adventices, protège contre les pluies battantes et nourrit le sol en se décomposant. Selon le climat, il peut faire économiser 30 à 40 % de l'eau d'arrosage.</p>
+<ul>
+<li><b>Matériaux</b> — paille, feuilles sèches, coques d'arachide, tontes séchées (jamais fraîches en couche épaisse).</li>
+<li><b>Laissez le collet dégagé</b> — gardez 5 cm sans paillis autour du pied pour éviter la pourriture et les limaces.</li>
+<li><b>Posez sur sol humide</b> — arrosez d'abord, paillez ensuite.</li>
+<li><b>Renouvelez</b> — le paillis se décompose : complétez en cours de saison.</li>
+</ul>
+        
+      </article>
+      <article class="lesson" id="cours-entretien-l3">
+        <div class="lesson-head"><span class="lesson-n num">03</span><h3>Lire un sac d'engrais : N-P-K</h3></div>
+        <p>Trois chiffres figurent sur un sac, par exemple 10-10-10 : ce sont les pourcentages d'azote (N), de phosphore (P₂O₅) et de potassium (K₂O). Un sac de 50 kg de 10-10-10 contient donc 5 kg d'azote.</p>
+<div class="tbl-wrap"><table class="tbl">
+<tr><th>Élément</th><th>Rôle</th><th>Signe de carence</th></tr>
+<tr><td>Azote (N)</td><td>Croissance des feuilles et des tiges</td><td>Vieilles feuilles jaunes, plant chétif</td></tr>
+<tr><td>Phosphore (P)</td><td>Racines, floraison</td><td>Feuilles violacées, croissance lente</td></tr>
+<tr><td>Potassium (K)</td><td>Grossissement et qualité des fruits, résistance</td><td>Bords des vieilles feuilles jaunes puis brûlés</td></tr>
+<tr><td>Calcium (Ca)</td><td>Solidité des parois cellulaires</td><td>Pourriture apicale du fruit (souvent liée à un arrosage irrégulier)</td></tr>
+<tr><td>Magnésium (Mg)</td><td>Chlorophylle</td><td>Jaunissement entre les nervures des vieilles feuilles</td></tr>
+</table></div>
+<h4>Adapter à la phase</h4>
+<ul>
+<li><b>Végétatif</b> — azote dominant, pour construire le feuillage.</li>
+<li><b>Floraison</b> — moins d'azote, plus de phosphore et de potassium.</li>
+<li><b>Fructification</b> — potassium, pour le calibre et la qualité.</li>
+</ul>
+<p>Un excès d'azote donne un beau feuillage mais peu de fruits et davantage de maladies.</p>
+        <div class="callout"><b>Fractionner</b>Mieux vaut apporter l'engrais en 2 ou 3 fois qu'en une seule : la plante en profite davantage et le lessivage par les pluies diminue.</div>
+      </article>
+      <article class="lesson" id="cours-entretien-l4">
+        <div class="lesson-head"><span class="lesson-n num">04</span><h3>Les engrais organiques à connaître</h3></div>
+        <ul>
+<li><b>Compost mûr</b> — équilibré, il améliore le sol ; c'est la base de toute fertilisation.</li>
+<li><b>Fientes de volaille</b> — riches en azote et en phosphore. Compostez-les ou enfouissez-les 2 à 3 semaines avant le semis, jamais fraîches au contact des racines.</li>
+<li><b>Purin d'ortie</b> — après 10 à 15 jours de fermentation, dilué à 1 volume pour 10 volumes d'eau en arrosage : un coup de pouce azoté en phase végétative.</li>
+<li><b>Cendres de bois</b> — potassium et calcium, mais elles font monter le pH : une poignée par m² et par an, uniquement sur sol acide.</li>
+<li><b>Poudre d'os, phosphates naturels</b> — phosphore à libération lente, utile sur les sols acides pauvres en phosphore.</li>
+<li><b>Engrais verts</b> — de l'azote presque gratuit grâce aux légumineuses.</li>
+</ul>
+        
+      </article>
+      <article class="lesson" id="cours-entretien-l5">
+        <div class="lesson-head"><span class="lesson-n num">05</span><h3>Le rendez-vous hebdomadaire</h3></div>
+        <p>Dix minutes par semaine, toujours le même jour, valent mieux qu'une grande intervention tous les mois.</p>
+<ul>
+<li><b>Observez</b> le dessous des feuilles, les jeunes pousses et le pied des plants.</li>
+<li><b>Tuteurez et gourmandez</b> — sur les tomates à croissance indéfinie, supprimez les gourmands à l'aisselle des feuilles.</li>
+<li><b>Désherbez tôt</b> — une adventice arrachée à 2 feuilles ne demande aucun effort.</li>
+<li><b>Notez</b> l'eau apportée, les apports d'engrais et tout symptôme dans votre carnet. En cas de doute sur une feuille, photographiez-la et utilisez le diagnostic IA.</li>
+</ul>
+        
+      </article>
+          <div class="todo" id="cours-entretien-todo">
+            <div class="todo-head">À refaire chez vous</div>
+            <ul><li><label><input type="checkbox"><span>Faire le test du doigt avant chaque arrosage pendant une semaine.</span></label></li><li><label><input type="checkbox"><span>Poser 5 à 7 cm de paillage en laissant le collet dégagé.</span></label></li><li><label><input type="checkbox"><span>Lire l'étiquette d'un engrais et calculer les kg d'azote contenus dans un sac.</span></label></li><li><label><input type="checkbox"><span>Bloquer une visite hebdomadaire de 10 minutes dans votre agenda.</span></label></li></ul>
+          </div>
+          <div class="quiz" id="cours-entretien-quiz">
+            <div class="quiz-head"><h3>Quiz de validation</h3><span class="quiz-score">Score <b class="quiz-score-val">0 / 3</b></span></div>
+            <div class="q" data-correct="1"><p class="qt">Quelle est la meilleure façon d'arroser une culture de tomates ?</p><button type="button" class="opt-btn">Sur le feuillage en plein midi</button><button type="button" class="opt-btn">Au pied, tôt le matin, en séances longues</button><button type="button" class="opt-btn">Un peu d'eau toutes les heures</button><p class="why">L'arrosage profond au pied, tôt, limite l'évaporation et les maladies du feuillage.</p></div><div class="q" data-correct="1"><p class="qt">Un sac de 20 kg d'engrais 15-15-15 contient combien d'azote ?</p><button type="button" class="opt-btn">1,5 kg</button><button type="button" class="opt-btn">3 kg</button><button type="button" class="opt-btn">15 kg</button><p class="why">20 kg × 15 % = 3 kg d'azote.</p></div><div class="q" data-correct="1"><p class="qt">Les vieilles feuilles jaunissent et le plant est chétif. Quelle carence est la plus probable ?</p><button type="button" class="opt-btn">Calcium</button><button type="button" class="opt-btn">Azote</button><button type="button" class="opt-btn">Lumière</button><p class="why">Les carences en azote apparaissent d'abord sur les vieilles feuilles. Vérifiez quand même que le sol n'est pas détrempé.</p></div>
+            <div class="quiz-result" aria-live="polite"></div>
+          </div>
+          <div class="course-nav"><a class="btn btn-ghost" href="#cours-semis">&larr; Calendrier des semis</a><a class="btn btn-clay" href="#cours-moisson">Moisson & maturité &rarr;</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="view" data-view="cours-moisson" data-title="Module 04 : Moisson &amp; maturité — AgriFortunat">
+
+  <section class="page-pad">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <span class="num-tag">Module 04 — 35 min · Niveau débutant</span>
+          <h2 class="display">Moisson &amp; maturité</h2>
+        </div>
+        <p class="lead">La récolte se joue en deux temps : choisir le bon moment à partir d'indices précis, puis protéger la qualité dans les premières heures. Terminez par un bilan chiffré pour progresser d'une saison à l'autre.</p>
+      </div>
+      <div class="course">
+        <aside class="toc" aria-label="Sommaire du cours"><div class="toc-title">Dans ce cours</div><a href="#" data-goto="cours-moisson-l1"><b>01</b><span>Les indices de maturité</span></a><a href="#" data-goto="cours-moisson-l2"><b>02</b><span>Le bon créneau et le bon geste</span></a><a href="#" data-goto="cours-moisson-l3"><b>03</b><span>Après la récolte : les 4 premières heures</span></a><a href="#" data-goto="cours-moisson-l4"><b>04</b><span>Faire le bilan de saison</span></a><a href="#" data-goto="cours-moisson-todo"><b>→</b><span>À refaire chez vous</span></a><a href="#" data-goto="cours-moisson-quiz"><b>?</b><span>Quiz de validation</span></a></aside>
+        <div>
+
+      <article class="lesson" id="cours-moisson-l1">
+        <div class="lesson-head"><span class="lesson-n num">01</span><h3>Les indices de maturité</h3></div>
+        <p>On ne récolte pas à une date mais sur des indices : couleur, fermeté, détachement, sucre.</p>
+<div class="tbl-wrap"><table class="tbl">
+<tr><th>Stade de la tomate</th><th>Signe</th><th>À récolter pour</th></tr>
+<tr><td>Vert mature</td><td>Fruit ferme, vert clair, brillance qui s'estompe</td><td>Transport sur longue distance</td></tr>
+<tr><td>Début de coloration</td><td>Premières traces roses ou jaunes à l'apex</td><td>Vente à quelques jours</td></tr>
+<tr><td>Rose</td><td>Un tiers à deux tiers du fruit coloré</td><td>Circuit court, marché de proximité</td></tr>
+<tr><td>Rouge ferme</td><td>Entièrement coloré, cède à peine sous le doigt</td><td>Consommation immédiate</td></tr>
+</table></div>
+<ul>
+<li><b>Réfractomètre (°Brix)</b> — mesure le sucre du jus ; une tomate mûre se situe autour de 4,5 à 6 °Brix selon la variété.</li>
+<li><b>Abscission</b> — le fruit mûr se détache avec son pédoncule d'un simple mouvement de rotation.</li>
+<li><b>Maïs doux</b> — soies brunes et sèches ; un grain percé donne un jus laiteux.</li>
+<li><b>Haricot vert</b> — gousse ferme et cassante, avant que les grains ne gonflent.</li>
+<li><b>Légumineuses sèches</b> — gousses sèches et sonores.</li>
+</ul>
+        
+      </article>
+      <article class="lesson" id="cours-moisson-l2">
+        <div class="lesson-head"><span class="lesson-n num">02</span><h3>Le bon créneau et le bon geste</h3></div>
+        <ul>
+<li><b>Récoltez le matin</b>, après évaporation de la rosée : les produits sont turgescents et frais, et la grosse chaleur n'est pas encore là.</li>
+<li><b>Évitez la pluie</b> — des produits mouillés se conservent mal et attrapent les champignons.</li>
+<li><b>Coupez, ne tirez pas</b> — sécateur ou couteau propre ; arracher blesse la plante et le fruit, et les blessures pourrissent.</li>
+<li><b>Contenants propres et peu profonds</b> — deux ou trois couches de fruits au plus, jamais de sac rempli à ras bord.</li>
+</ul>
+        
+      </article>
+      <article class="lesson" id="cours-moisson-l3">
+        <div class="lesson-head"><span class="lesson-n num">03</span><h3>Après la récolte : les 4 premières heures</h3></div>
+        <p>Un produit récolté continue de respirer : il consomme ses sucres, dégage de la chaleur et s'abîme. Chaque baisse de 10 °C divise la vitesse de dégradation par deux ou trois.</p>
+<ul>
+<li><b>À l'ombre tout de suite</b> — un fruit laissé au soleil chauffe bien au-dessus de la température de l'air.</li>
+<li><b>Triez</b> — écartez les fruits fendus, blessés ou pourris ; un seul fruit abîmé contamine toute la caisse.</li>
+<li><b>Ventilez</b> — caisses ajourées, jamais empilées en plein soleil.</li>
+<li><b>Température</b> — pour la tomate, 12 à 15 °C ; pas de réfrigérateur sous 10 °C, le fruit y perd goût et texture.</li>
+<li><b>Humidité</b> — légumes-feuilles à l'abri du vent et du soleil, sous un linge humide ; oignons et graines bien secs avant stockage.</li>
+</ul>
+        
+      </article>
+      <article class="lesson" id="cours-moisson-l4">
+        <div class="lesson-head"><span class="lesson-n num">04</span><h3>Faire le bilan de saison</h3></div>
+        <p>La saison n'est pas finie à la dernière récolte. Un bilan de 30 minutes améliore la suivante.</p>
+<ul>
+<li><b>Pesez et notez</b> les kilos récoltés par parcelle et par date.</li>
+<li><b>Calculez le rendement</b> — kg récoltés ÷ surface en m² = kg/m². Multipliez par 10 pour obtenir des tonnes par hectare. Exemple : 60 kg sur 15 m², soit 4 kg/m², soit 40 t/ha.</li>
+<li><b>Comparez</b> avec vos objectifs et avec les conditions de la saison (eau, engrais, maladies).</li>
+<li><b>Préparez la suite</b> — semez un engrais vert, rendez le compost au sol et changez de famille sur la parcelle.</li>
+</ul>
+        <div class="callout"><b>Le bilan relie tout</b>Un rendement décevant se lit souvent dans le carnet : arrosage irrégulier, semis trop tôt, pH jamais mesuré. Notez, comparez, corrigez.</div>
+      </article>
+          <div class="todo" id="cours-moisson-todo">
+            <div class="todo-head">À refaire chez vous</div>
+            <ul><li><label><input type="checkbox"><span>Photographier un plant pendant 5 jours de suite pour suivre ses stades de maturité.</span></label></li><li><label><input type="checkbox"><span>Récolter un matin et un après-midi, puis comparer la conservation après 3 jours.</span></label></li><li><label><input type="checkbox"><span>Aménager un coin d'ombre ventilé pour le tri des fruits.</span></label></li><li><label><input type="checkbox"><span>Calculer le rendement d'une planche en kg/m².</span></label></li></ul>
+          </div>
+          <div class="quiz" id="cours-moisson-quiz">
+            <div class="quiz-head"><h3>Quiz de validation</h3><span class="quiz-score">Score <b class="quiz-score-val">0 / 3</b></span></div>
+            <div class="q" data-correct="0"><p class="qt">Quel est le meilleur moment pour récolter ?</p><button type="button" class="opt-btn">Le matin, après évaporation de la rosée</button><button type="button" class="opt-btn">À midi, en p
