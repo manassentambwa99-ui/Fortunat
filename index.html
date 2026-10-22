@@ -1390,3 +1390,576 @@ main,footer{margin-left:0}
           <div class="quiz" id="cours-moisson-quiz">
             <div class="quiz-head"><h3>Quiz de validation</h3><span class="quiz-score">Score <b class="quiz-score-val">0 / 3</b></span></div>
             <div class="q" data-correct="0"><p class="qt">Quel est le meilleur moment pour récolter ?</p><button type="button" class="opt-btn">Le matin, après évaporation de la rosée</button><button type="button" class="opt-btn">À midi, en p
+              
+<div class="quiz-result" aria-live="polite"></div>
+          </div>
+          <div class="course-nav"><a class="btn btn-ghost" href="#cours-entretien">&larr; Entretien & engrais</a><a class="btn btn-clay" href="#croissance">Simuler une croissance &rarr;</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+</main>
+
+<footer id="contact">  
+    <div class="wrap">  
+      <div class="foot-grid">  
+        <div class="foot-brand">  
+          <a href="#accueil" class="logo">  
+            <svg class="seed" viewBox="0 0 32 32" fill="none" aria-hidden="true">  
+              <path d="M16 29V13" stroke="#14301F" stroke-width="2.1" stroke-linecap="round"/>  
+              <path d="M16 17C16 11 11.2 6.6 4.6 6.2 4.2 13 8.8 17.6 16 17Z" fill="#2F6B3F"/>  
+              <path d="M16 13.4C16 8.2 20.2 4.3 26.2 4 26.6 9.9 22.4 13.9 16 13.4Z" fill="#C2622D"/>  
+            </svg>  
+            Agri<em>Fortunat</em>  
+          </a>  
+          <p>Académie agricole, conseil de culture et assistant phytosanitaire intelligent. Pour celles et ceux qui veulent comprendre la terre avant de la travailler.</p>  
+        </div>  
+        <div class="foot">  
+          <h5>Formation</h5>  
+          <ul>  
+            <li><a href="#cours-sol">Analyse du sol</a></li>  
+            <li><a href="#cours-semis">Calendrier des semis</a></li>  
+            <li><a href="#cours-entretien">Entretien &amp; engrais</a></li>  
+            <li><a href="#cours-moisson">Moisson &amp; maturité</a></li>  
+          </ul>  
+        </div>  
+        <div class="foot">  
+          <h5>Outils</h5>  
+          <ul>  
+            <li><a href="#croissance">Simulateur de croissance</a></li>  
+            <li><a href="#diagnostic">Diagnostic par photo</a></li>  
+            <li><a href="#croissance">Zones optimales</a></li>  
+            <li><a href="#diagnostic">Suivi de parcelle</a></li>  
+          </ul>  
+        </div>  
+        <div class="foot">  
+          <h5>Contact</h5>  
+          <ul>  
+            <li><a href="mailto:contact@agrifortuna.com">contact@agrifortuna.com</a></li>  
+            <li><a href="tel:+22900000000">+229 00 00 00 00</a></li>  
+            <li><a href="#chef">Le mot du Chef</a></li>  
+            <li><a href="#diagnostic">Devenir partenaire</a></li>  
+          </ul>  
+        </div>  
+      </div>  
+      <div class="foot-note">  
+        <div class="warn">Les analyses par photo sont des estimations indicatives : confirmez sur le terrain avant tout traitement.</div>  
+        <div>© 2026 AgriFortunat — Tous droits réservés.</div>  
+      </div>  
+    </div>  
+  </footer>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script>
+(function(){
+  "use strict";
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const $ = (s, c) => (c || document).querySelector(s);
+  const $$ = (s, c) => Array.from((c || document).querySelectorAll(s));
+
+  /* ---------------- header ---------------- */
+  const header = $('#header');
+  const onScroll = () => {
+    if (window.scrollY > 24) header.classList.add('shrunk');
+    else header.classList.remove('shrunk');
+    updateRail();
+  };
+  window.addEventListener('scroll', onScroll, {passive:true});
+
+  /* ---------------- burger ---------------- */
+  const burger = $('#burger'), menu = $('#mobileMenu');
+  burger.addEventListener('click', () => {
+    const open = menu.classList.toggle('open');
+    burger.classList.toggle('open', open);
+    burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  $$('#mobileMenu a').forEach(a => a.addEventListener('click', () => {
+    menu.classList.remove('open'); burger.classList.remove('open');
+    burger.setAttribute('aria-expanded','false');
+  }));
+
+  /* ---------------- rail : onglet courant + sections visibles ---------------- */
+  const railItems = $$('.rail-item');
+  const railMark = $('#railMark');
+  const pageToRail = { academie:'academie', cours:'academie', croissance:'croissance', diagnostic:'diagnostic' };
+  const scrollSections = ['chef','contact'].map(id => document.getElementById(id)).filter(Boolean);
+  function updateRail(){
+    const page = document.body.getAttribute('data-page') || '';
+    let current = pageToRail[page] || null;
+    const y = window.scrollY + window.innerHeight * 0.34;
+    // une section masquée (autre onglet) n'a pas de position : on l'ignore
+    scrollSections.forEach(s => { if (s.offsetParent !== null && s.offsetTop <= y) current = s.id; });
+    railItems.forEach(it => {
+      const on = it.dataset.rail === current;
+      it.classList.toggle('active', on);
+      if (on && railMark){
+        const r = it.getBoundingClientRect(), rr = it.closest('.rail').getBoundingClientRect();
+        railMark.style.top = (r.top - rr.top) + 'px';
+        railMark.style.height = r.height + 'px';
+      }
+    });
+    if (!current && railMark) railMark.style.height = '0px';
+  }
+
+  /* ---------------- accordion registre ---------------- */
+  $$('.row-head').forEach(head => {
+    const row = head.closest('.row');
+    const toggle = () => {
+      const open = row.classList.toggle('open');
+      head.setAttribute('aria-expanded', open ? 'true' : 'false');
+    };
+    head.addEventListener('click', toggle);
+    head.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+    });
+  });
+  const firstRow = $('.row');
+  if (firstRow) { firstRow.classList.add('open'); $('.row-head', firstRow).setAttribute('aria-expanded','true'); }
+
+  /* ---------------- animations d'entrée (une fois par onglet) ---------------- */
+  const revealed = new WeakSet();
+  function initReveals(view){
+    if (revealed.has(view)) return;
+    revealed.add(view);
+    if (!(window.gsap && window.ScrollTrigger) || reduce) return;
+    gsap.registerPlugin(ScrollTrigger);
+    $$('.reveal', view).forEach((el, i) => {
+      gsap.fromTo(el, {y: 26, opacity: 0}, {
+        y: 0, opacity: 1, duration: .85, ease: 'power3.out',
+        scrollTrigger: { trigger: el, start: 'top 88%', once: true },
+        delay: (i % 4) * 0.06
+      });
+    });
+  }
+  let heroDone = false;
+  function heroIntro(){
+    heroDone = true;
+    if (!(window.gsap && window.ScrollTrigger) || reduce) return;
+    const heroMedia = $('.hero-media img');
+    if (heroMedia) gsap.fromTo(heroMedia, {scale: 1.12}, {scale: 1, duration: 1.7, ease: 'power3.out'});
+    gsap.fromTo('.hero-plate', {y: 34, opacity: 0}, {y: 0, opacity: 1, duration: .95, ease: 'power3.out', delay: .22});
+    gsap.fromTo('.hero-title', {y: 30, opacity: 0}, {y: 0, opacity: 1, duration: 1, ease: 'power3.out'});
+  }
+
+  /* filet de sécurité : rien ne doit rester invisible si une animation échoue */
+  function safety(){
+    $$('.view.active .reveal, .view.active .hero-plate, .view.active .hero-title').forEach(el => {
+      const r = el.getBoundingClientRect();
+      if (parseFloat(getComputedStyle(el).opacity) < 0.06 && r.top < window.innerHeight && r.bottom > 0){
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+      }
+    });
+  }
+
+  /* ---------------- onglets (navigation par #) ---------------- */
+  const views = {};
+  $$('.view').forEach(v => { views[v.getAttribute('data-view')] = v; });
+  let currentView = null;
+
+  function show(name){
+    if (name === currentView) return false;
+    $$('.view.active').forEach(v => v.classList.remove('active'));
+    views[name].classList.add('active');
+    currentView = name;
+    document.body.setAttribute('data-page', name.indexOf('cours-') === 0 ? 'cours' : name);
+    const t = views[name].getAttribute('data-title');
+    if (t) document.title = t;
+    initReveals(views[name]);
+    if (name === 'accueil' && !heroDone) heroIntro();
+    if (window.ScrollTrigger) ScrollTrigger.refresh();
+    return true;
+  }
+
+  function route(){
+    let h = '';
+    try { h = decodeURIComponent((location.hash || '').replace(/^#/, '')); } catch (e) { h = ''; }
+    let anchor = null;
+    if (h === 'chef' || h === 'parcours'){ anchor = h; h = 'accueil'; }
+    else if (h === 'contact'){ anchor = 'contact'; h = currentView || 'accueil'; }
+    if (!views[h]) h = 'accueil';
+    const changed = show(h);
+    if (anchor){
+      requestAnimationFrame(() => {
+        const el = document.getElementById(anchor);
+        if (el) el.scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block: 'start'});
+      });
+    } else if (changed){
+      window.scrollTo({top: 0, behavior: 'instant'});
+    }
+    updateRail();
+    window.dispatchEvent(new Event('viewchange'));
+    setTimeout(safety, 2800);
+  }
+  window.addEventListener('hashchange', route);
+
+  // cliquer sur le lien de l'onglet où l'on est déjà : remonter en haut de page
+  document.addEventListener('click', e => {
+    const a = e.target.closest('a[href^="#"]');
+    if (!a) return;
+    const name = a.getAttribute('href').slice(1);
+    if (name && name === currentView){
+      e.preventDefault();
+      window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
+    }
+  });
+
+  route();
+  onScroll();
+  window.addEventListener('resize', updateRail);
+})();
+
+(function(){
+  "use strict";
+  const $ = (s, c) => (c || document).querySelector(s);
+  const $$ = (s, c) => Array.from((c || document).querySelectorAll(s));
+  if (!document.getElementById('plantSvg')) return;
+
+  /* ---------------- simulateur de croissance ---------------- */  
+  const plant = $('#plantSvg');  
+  const sliders = {  
+    lum: $('#sLum'), eau: $('#sEau'), temp: $('#sTemp'), azote: $('#sAzote')  
+  };  
+  const out = {  
+    lum: $('#vLum'), eau: $('#vEau'), temp: $('#vTemp'), azote: $('#vAzote')  
+  };  
+  
+  // score : 1 dans la plage optimale, décroissance linéaire en dehors  
+  function score(v, min, max, span){  
+    if (v >= min && v <= max) return 1;  
+    const d = v < min ? min - v : v - max;  
+    return Math.max(0, 1 - d / span);  
+  }  
+  
+  function evaluate(clearPresets){  
+    const lum = +sliders.lum.value, eau = +sliders.eau.value,  
+          temp = +sliders.temp.value, azote = +sliders.azote.value;  
+  
+    out.lum.textContent = lum + ' h / jour';  
+    out.eau.textContent = eau + ' mm / sem.';  
+    out.temp.textContent = temp + ' °C';  
+    out.azote.textContent = azote + ' kg / ha';  
+  
+    const s = {  
+      lum: score(lum, 8, 12, 6),  
+      eau: score(eau, 25, 45, 22),  
+      temp: score(temp, 18, 28, 11),  
+      azote: score(azote, 60, 120, 65)  
+    };  
+    const keys = Object.keys(s);  
+    const moy = keys.reduce((a,k) => a + s[k], 0) / keys.length;  
+    const vigueur = Math.round(moy * 100);  
+  
+    // plante  
+    const grow = Math.max(0.16, Math.min(1, 0.22 + (vigueur / 100) * 0.92));  
+    plant.style.setProperty('--grow', grow.toFixed(3));  
+    const health = vigueur / 100;  
+    const leaf = health > 0.72 ? '#69B96B' : health > 0.45 ? '#8FA84F' : health > 0.25 ? '#B98B3F' : '#9A6B3A';  
+    const stem = health > 0.72 ? '#8CCB84' : health > 0.45 ? '#A7BE6E' : '#C2A15C';  
+    plant.style.setProperty('--leaf', leaf);  
+    plant.style.setProperty('--stem', stem);  
+    plant.classList.toggle('wilt', vigueur < 45);  
+    plant.classList.toggle('wet', eau > 30 && eau <= 60);  
+  
+    // soleil réagit à la lumière  
+    const sun = $('#sun'), rays = $('#sunRays');  
+    if (sun) sun.setAttribute('opacity', (0.14 + (lum / 16) * 0.72).toFixed(2));  
+    if (rays) rays.setAttribute('opacity', (0.08 + (lum / 16) * 0.55).toFixed(2));  
+  
+    // indicateurs  
+    $('#idxVigueur').textContent = vigueur;  
+    $('#gVigueur').style.width = vigueur + '%';  
+    $('#gVigueur').style.background = vigueur > 70 ? '#69B96B' : vigueur > 45 ? '#C2622D' : '#D2691E';  
+    $('#idxCroissance').textContent = '+' + (0.4 + health * 3.4).toFixed(1).replace('.', ',');  
+    $('#idxRendement').textContent = (0.8 + health * 6.4).toFixed(1).replace('.', ',');  
+    $('#idxRecolte').textContent = Math.round(128 - health * 52);  
+  
+    // verdict : on pointe le facteur le plus déficient  
+    const worst = keys.reduce((a,k) => s[k] < s[a] ? k : a, keys[0]);  
+    const titre = $('#verdictTitle'), texte = $('#verdictText');  
+    const msgs = {  
+      lum: lum < 8  
+        ? ["Manque de lumière", "La plante s'étiole : tiges allongées, feuillage pâle. Ajoutez 2 à 3 h d'exposition ou déplacez la culture près d'une baie au sud."]  
+        : ["Excès de lumière", "Au-delà de 12 h d'exposition, la plante consomme ses réserves. Installez une ombrière 30 % aux heures les plus chaudes."],  
+      eau: eau < 25  
+        ? ["Sous-arrosage", "Le substrat s'assèche : la croissance ralentit dès que la turgescence chute. Passez à 2 arrosages longs par semaine et pailler 7 cm."]  
+        : ["Excès d'eau", "Risque d'asphyxie racinaire et de botrytis. Espacez les arrosages, vérifiez le drainage et aérez la serre en fin de journée."],  
+      temp: temp < 18  
+        ? ["Température trop fraîche", "Sous 18 °C, la floraison stagne et la nouaison est mal assurée. Couvrez la culture la nuit ou chauffez la serre à 18 °C minimum."]  
+        : ["Température trop élevée", "Au-delà de 28 °C, le pollen devient stérile. Ventilez, ombragez et arrosez au petit matin pour refroidir la zone racinaire."],  
+      azote: azote < 60  
+        ? ["Carence en azote", "Feuillage pâle, feuilles vieilles jaunes, croissance ralentie. Apportez 30 kg/ha d'azote sous forme de compost mûr ou de purin d'ortie."]  
+        : ["Excès d'azote", "Feuillage très vert, tiges molles, sensibilité aux maladies. Interrompez tout apport et passez à une formule riche en potassium."]  
+    };  
+    if (vigueur >= 82 && s[worst] > 0.92){  
+      titre.textContent = 'Conditions équilibrées';  
+      texte.textContent = "La plante dispose de tout ce qu'il lui faut : maintenez l'humidité régulière et surveillez le stade floraison.";  
+    } else {  
+      titre.textContent = msgs[worst][0];  
+      texte.textContent = msgs[worst][1];  
+    }  
+    if (clearPresets) $$('.preset').forEach(b => b.classList.remove('on'));  
+  }  
+  
+  Object.keys(sliders).forEach(k => sliders[k].addEventListener('input', () => evaluate(true)));  
+  
+  const presets = {  
+    optimal: {lum:10, eau:35, temp:23, azote:90},  
+    secheresse: {lum:14, eau:8, temp:31, azote:70},  
+    canicule: {lum:15, eau:22, temp:37, azote:110},  
+    carence: {lum:10, eau:35, temp:22, azote:15}  
+  };  
+  $$('.preset').forEach(btn => btn.addEventListener('click', () => {  
+    const p = presets[btn.dataset.preset];  
+    if (!p) return;  
+    Object.keys(p).forEach(k => sliders[k].value = p[k]);  
+    evaluate();  
+    btn.classList.add('on');  
+  }));  
+  evaluate();  
+})();
+
+(function(){
+  "use strict";
+  const $ = (s, c) => (c || document).querySelector(s);
+  const $$ = (s, c) => Array.from((c || document).querySelectorAll(s));
+  if (!document.getElementById('drop')) return;
+
+  /* ---------------- diagnostic IA ---------------- */  
+  const drop = $('#drop'), fileInput = $('#plantFile'), preview = $('#preview'),  
+        previewImg = $('#previewImg'), previewTag = $('#previewTag'), log = $('#log');  
+
+  drop.addEventListener('click', () => fileInput.click());  
+  drop.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fileInput.click(); } });  
+  ['dragenter','dragover'].forEach(ev => drop.addEventListener(ev, e => {  
+    e.preventDefault(); drop.classList.add('over');  
+  }));  
+  ['dragleave','drop'].forEach(ev => drop.addEventListener(ev, e => {  
+    e.preventDefault(); drop.classList.remove('over');  
+  }));  
+  drop.addEventListener('drop', e => {  
+    const f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];  
+    if (f) handleFile(f);  
+  });  
+  fileInput.addEventListener('change', e => {  
+    const f = e.target.files && e.target.files[0];  
+    if (f) handleFile(f);  
+  });  
+  $('#btnRescan').addEventListener('click', () => fileInput.click());  
+  
+  function addLog(text){  
+    const d = document.createElement('div');  
+    d.textContent = text;  
+    log.appendChild(d);  
+    log.scrollTop = log.scrollHeight;  
+    while (log.children.length > 7) log.removeChild(log.firstChild);  
+  }  
+  function resetLog(){ log.innerHTML = ''; }  
+  
+  function handleFile(file){  
+    if (!file.type || file.type.indexOf('image/') !== 0){  
+      addLog('Format refusé : veuillez choisir une image (JPG, PNG, HEIC).');  
+      return;  
+    }  
+    const reader = new FileReader();  
+    reader.onload = e => {  
+      previewImg.src = e.target.result;  
+      preview.style.display = 'block';  
+      previewTag.textContent = file.name.length > 28 ? file.name.slice(0,25) + '…' : file.name;  
+      runAnalysis(e.target.result, file);  
+    };  
+    reader.readAsDataURL(file);  
+  }  
+  
+  function setRing(pct, title, desc){  
+    const arc = $('#ringArc');  
+    const C = 2 * Math.PI * 50;  
+    arc.setAttribute('stroke-dasharray', C.toFixed(1));  
+    arc.setAttribute('stroke-dashoffset', (C * (1 - pct / 100)).toFixed(1));  
+    $('#ringVal').textContent = pct + '%';  
+    if (title) $('#ringTitle').textContent = title;  
+    if (desc) $('#ringDesc').textContent = desc;  
+  }  
+  
+  function fillReport(r){  
+    $('#resEspece').textContent = r.espece;  
+    $('#resAge').textContent = r.age;  
+    $('#resEngrais').textContent = r.engrais;  
+    $('#resArrosage').textContent = r.arrosage;  
+    $('#resExposition').textContent = r.exposition;  
+    $('#careEau').textContent = r.careEau;  
+    $('#careEngrais').textContent = r.careEngrais;  
+    $('#careRecolte').textContent = r.careRecolte;  
+    setRing(r.maturite, r.titre, r.desc);  
+  }  
+  
+  function simulateResult(){  
+    return {  
+      espece: "Tomate (Solanum lycopersicum)",  
+      age: "3 semaines — stade végétatif",  
+      engrais: "Compost mûr + 30 kg/ha d'azote",  
+      arrosage: "25 mm / semaine, au pied",  
+      exposition: "Plein soleil — 8 à 10 h / jour",  
+      careEau: "Dans 2 jours",  
+      careEngrais: "Sous 6 jours",  
+      careRecolte: "≈ 68 jours",  
+      maturite: 42,  
+      titre: "Stade végétatif — bonne vigueur",  
+      desc: "Le feuillage est franc et l'enracinement progresse. Poursuivez l'apport azoté jusqu'à l'entrée en floraison, puis basculez sur une formule potassique."  
+    };  
+  }  
+  
+  async function runAnalysis(base64, file){  
+    resetLog();  
+    $('#resEspece').textContent = "Analyse en cours…";  
+    $('#resAge').textContent = 'Patientez…';  
+    $('#resEngrais').textContent = '…';  
+    $('#resArrosage').textContent = '…';  
+    $('#resExposition').textContent = '…';  
+    setRing(12, 'Analyse en cours', 'Le modèle examine le feuillage, la structure et les symptômes visibles.');  
+  
+    const steps = [  
+      'Image reçue (' + Math.max(1, Math.round(file.size / 1024)) + ' Ko) — prétraitement…',  
+      'Segmentation du feuillage et du limbe…',  
+      'Recherche de symptômes : taches, chlorose, nécrose, mildiou…',  
+      'Croisement avec la base AgriFortunat (12 cultures)…'  
+    ];  
+    steps.forEach((s, i) => setTimeout(() => addLog(s), 240 + i * 520));  
+  
+    let result = null;  
+    try {  
+      result = await groqAnalyze(base64);  
+      addLog('Réponse du modèle vision reçue.');  
+    } catch (err) {  
+      addLog('API indisponible (' + (err && err.message ? err.message : 'erreur') + ') — bascule sur le moteur local.');  
+      result = simulateResult();  
+    }  
+    setTimeout(() => {  
+      fillReport(result);  
+      previewTag.textContent = 'Analyse terminée — ' + result.espece.split('(')[0].trim();  
+      addLog('Rapport généré. Réf. ' + $('#reportId').textContent.replace('Réf. ', '') + '.');  
+    }, 700);  
+  }  
+  
+
+  // Réduit la photo avant envoi : plus rapide, et sous les limites de taille du serveur et de l'API
+  function shrinkImage(dataUrl, maxSide, quality){
+    return new Promise(resolve => {
+      const img = new Image();
+      img.onload = () => {
+        const k = Math.min(1, maxSide / Math.max(img.width, img.height));
+        const c = document.createElement('canvas');
+        c.width = Math.max(1, Math.round(img.width * k));
+        c.height = Math.max(1, Math.round(img.height * k));
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+        try { resolve(c.toDataURL('image/jpeg', quality)); } catch (e) { resolve(dataUrl); }
+      };
+      img.onerror = () => resolve(dataUrl);
+      img.src = dataUrl;
+    });
+  }
+
+  // L'appel à Groq se fait côté serveur (api/analyze.js) : la clé n'est jamais dans cette page.
+  async function groqAnalyze(base64){
+    const image = await shrinkImage(base64, 1280, 0.82);
+    const res = await fetch('/api/analyze', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ image: image })
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    const text = data && typeof data.text === 'string' ? data.text : '';
+    const pick = (key) => {
+      const m = text.match(new RegExp(key + '\\s*:\\s*(.+)', 'i'));
+      return m ? m[1].trim() : '';
+    };
+    const mat = parseInt(pick('MATURITE'), 10);
+    return {
+      espece: pick('ESPECE') || 'Non identifié avec certitude',
+      age: pick('AGE') || '—',
+      engrais: pick('ENGRAIS') || '—',
+      arrosage: pick('ARROSAGE') || '—',
+      exposition: pick('EXPOSITION') || '—',
+      careEau: 'Sous 3 jours',
+      careEngrais: 'Sous 8 jours',
+      careRecolte: 'Selon stade',
+      maturite: isNaN(mat) ? 35 : Math.max(0, Math.min(100, mat)),
+      titre: pick('TITRE') || 'Analyse visuelle',
+      desc: pick('DESC') || 'Observez votre plante régulièrement et notez toute évolution dans votre carnet de parcelle.'
+    };
+  }
+
+  // réf. aléatoire  
+  $('#reportId').textContent = 'Réf. AF-2026-' + String(Math.floor(1000 + Math.random() * 8999));  
+})();
+
+(function(){
+  "use strict";
+  const $ = (s, c) => (c || document).querySelector(s);
+  const $$ = (s, c) => Array.from((c || document).querySelectorAll(s));
+
+  /* ---------------- sommaire : aller à une leçon / leçon en cours ---------------- */
+  document.addEventListener('click', e => {
+    const a = e.target.closest('[data-goto]');
+    if (!a) return;
+    e.preventDefault();
+    const el = document.getElementById(a.getAttribute('data-goto'));
+    if (el) el.scrollIntoView({behavior: 'smooth', block: 'start'});
+  });
+
+  function markToc(){
+    const view = $('.view.active');
+    if (!view) return;
+    const links = $$('.toc a[data-goto]', view);
+    if (!links.length) return;
+    const lessons = links.map(a => document.getElementById(a.getAttribute('data-goto'))).filter(Boolean);
+    const y = window.scrollY + window.innerHeight * 0.3;
+    let cur = lessons[0];
+    lessons.forEach(l => { if (l.getBoundingClientRect().top + window.scrollY <= y) cur = l; });
+    links.forEach(a => a.classList.toggle('on', !!cur && a.getAttribute('data-goto') === cur.id));
+  }
+  window.addEventListener('scroll', markToc, {passive:true});
+  window.addEventListener('viewchange', markToc);
+
+  /* ---------------- quiz (un par cours) ---------------- */
+  $$('.quiz').forEach(quiz => {
+    const questions = $$('.q', quiz);
+    const scoreEl = $('.quiz-score-val', quiz);
+    const resultEl = $('.quiz-result', quiz);
+    let score = 0, answered = 0;
+
+    questions.forEach(q => {
+      const correct = parseInt(q.getAttribute('data-correct'), 10);
+      $$('.opt-btn', q).forEach((btn, i) => {
+        btn.addEventListener('click', () => {
+          if (q.classList.contains('done')) return;
+          q.classList.add('done');
+          answered++;
+          if (i === correct){ btn.classList.add('good'); score++; }
+          else {
+            btn.classList.add('bad');
+            const good = $$('.opt-btn', q)[correct];
+            if (good) good.classList.add('good');
+          }
+          scoreEl.textContent = score + ' / ' + questions.length;
+          if (answered === questions.length){
+            const msg = score === questions.length
+              ? 'Module validé. Vous pouvez passer au suivant.'
+              : score >= 2
+                ? 'Presque : relisez les leçons où vous avez hésité, puis refaites le quiz.'
+                : 'Relisez le cours calmement, puis refaites le quiz.';
+            resultEl.innerHTML = '<b>' + score + ' bonne' + (score > 1 ? 's' : '') + ' réponse' + (score > 1 ? 's' : '') + ' sur ' + questions.length + '.</b> ' + msg;
+            resultEl.classList.add('show');
+          }
+        });
+      });
+    });
+  });
+})();
+
+</script>
+</body>
+</html>
