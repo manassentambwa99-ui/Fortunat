@@ -1,0 +1,44 @@
+{
+  "id": "./",
+  "name": "Agri Labs",
+  "short_name": "Agri Labs",
+  "description": "Cours d'agriculture, test de niveau, simulateur de croissance et scanner de plantes par IA.",
+  "lang": "fr",
+  "dir": "ltr",
+  "start_url": "./?source=pwa",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "background_color": "#071a12",
+  "theme_color": "#0e2a1d",
+  "categories": ["education", "lifestyle", "productivity"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ],
+  "shortcuts": [
+    {
+      "name": "Scanner une plante",
+      "short_name": "Scanner",
+      "description": "Photographier une plante et lancer l'analyse IA",
+      "url": "./?action=scan",
+      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Test de niveau",
+      "short_name": "Test",
+      "description": "Mesurer votre niveau en agriculture",
+      "url": "./#quiz",
+      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Académie",
+      "short_name": "Cours",
+      "description": "Ouvrir les modules de cours",
+      "url": "./#academie",
+      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    }
+  ]
+}
